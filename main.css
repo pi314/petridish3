@@ -1,0 +1,41 @@
+* {
+    margin: 0;
+    border: 0;
+    padding: 0;
+}
+
+html, body {
+    background: black;
+}
+
+#wrapper {
+    margin: auto;
+    width: 800px;
+    height: 600px;
+    background: #111111;
+}
+
+#control-panel {
+    display: inline-block;
+    width: 200px;
+    height: 100%;
+    background: #222222;
+}
+
+#petridish {
+    display: inline-block;
+    width: 596px;
+}
+
+.row {
+    height: 22px;
+}
+
+.b-empty {
+    width: 20px;
+    height: 20px;
+    margin: 1px;
+    display: inline-block;
+    background: #171717;
+}
+
