@@ -1,14 +1,14 @@
 <svg version="1.1"
     baseProfile="full"
-    width="150" height="100"
+    width="170" height="100"
     xmlns="http://www.w3.org/2000/svg">
-    <rect x="0" y="0" width="150" height="100" stroke="white" fill="transparent"/>
-    <text x="75" y="30" font-size="20" text-anchor="middle" fill="#EEEEEE" font-family="monospace">PetriDish</text>
-    <path d="M 15 55, m -5 5, a 21 8 45 0 1 30 30" stroke="#AAAAAA" fill="transparent"/>
-    <path d="M 15 55, a 21 8 45 0 0 30 30, a 21 8 45 0 0 -30 -30, l -5 5, a 21 8 45 0 0 30 30, l 5 -5, m -5 5" stroke="white" fill="transparent"/>
-    <circle cx="30" cy="75" r="2" fill="#88FF88"/>
-    <path id="lime-cell" d="M 55 50, l 8 3, a 2 2 0 0 1 2 2, l -3 8, a 2 2 0 0 1 -2 2, l -8 -3, a 2 2 0 0 1 -2 -2, l 3 -8, a 2 2 0 0 1 2 -2" stroke="transparent" fill="lime"/>
-    <path d="M 85 75, l 5 5, a 2 2 0 0 1 0 2, l -5 5, a 2 2 0 0 1 -2 0, l -5 -5, a 2 2 0 0 1 0 -2, l 5 -5, a 2 2 0 0 1 2 0" fill="cyan"/>
-    <path d="M 110 60, l 8 2, a 2 2 0 0 1 2 2, l -2 8, a 2 2 0 0 1 -2 2, l -8 -2, a 2 2 0 0 1 -2 -2, l 2 -8, a 2 2 0 0 1 2 -2" stroke="transparent" fill="magenta"/>
+    <rect x="0" y="0" width="170" height="100" stroke="white" fill="transparent"/>
+    <text x="85" y="30" font-size="20" text-anchor="middle" fill="#EEEEEE" font-family="monospace">PetriDish</text>
+    <path d="M 30 55, m -5 5, a 21 8 45 0 1 30 30" stroke="#AAAAAA" fill="transparent"/>
+    <path d="M 30 55, a 21 8 45 0 0 30 30, a 21 8 45 0 0 -30 -30, l -5 5, a 21 8 45 0 0 30 30, l 5 -5, m -5 5" stroke="white" fill="transparent"/>
+    <circle cx="45" cy="75" r="2" fill="#88FF88"/>
+    <path id="lime-cell" d="M 70 50, l 8 3, a 2 2 0 0 1 2 2, l -3 8, a 2 2 0 0 1 -2 2, l -8 -3, a 2 2 0 0 1 -2 -2, l 3 -8, a 2 2 0 0 1 2 -2" stroke="transparent" fill="lime"/>
+    <path d="M 100 75, l 5 5, a 2 2 0 0 1 0 2, l -5 5, a 2 2 0 0 1 -2 0, l -5 -5, a 2 2 0 0 1 0 -2, l 5 -5, a 2 2 0 0 1 2 0" fill="cyan"/>
+    <path d="M 125 60, l 8 2, a 2 2 0 0 1 2 2, l -2 8, a 2 2 0 0 1 -2 2, l -8 -2, a 2 2 0 0 1 -2 -2, l 2 -8, a 2 2 0 0 1 2 -2" stroke="transparent" fill="magenta"/>
 </svg>
 

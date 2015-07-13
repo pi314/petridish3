@@ -1,7 +1,9 @@
-* {
+div {
     margin: 0;
     border: 0;
     padding: 0;
+    font-family: monospace;
+    font-size: 0;
 }
 
 html, body {
@@ -23,6 +25,33 @@ html, body {
     background: #222222;
 }
 
+#logo-wrapper {
+    margin: 15px auto;
+    width: 170px;
+    height: 100px;
+}
+
+#inventory {
+    margin: auto;
+    padding: 5px;
+    width: 160px;
+    background: #333333;
+}
+
+#inventory-title {
+    color: lightgray;
+    font-size: 20px;
+    text-align: center;
+}
+
+#inventory > hr {
+    border-color: lightgray;
+}
+
+#inventory-cells {
+    min-height: 20px;
+}
+
 #petridish {
     display: inline-block;
     width: 596px;
@@ -38,11 +67,5 @@ html, body {
     margin: 1px;
     display: inline-block;
     background: #171717;
-}
-
-#logo-wrapper {
-    margin: 20px auto;
-    width: 150px;
-    height: 100px;
 }
 
