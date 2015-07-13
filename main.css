@@ -16,6 +16,7 @@ html, body {
 }
 
 #control-panel {
+    vertical-align: top;
     display: inline-block;
     width: 200px;
     height: 100%;
@@ -37,5 +38,11 @@ html, body {
     margin: 1px;
     display: inline-block;
     background: #171717;
+}
+
+#logo-wrapper {
+    margin: 20px auto;
+    width: 150px;
+    height: 100px;
 }
 

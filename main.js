@@ -2,4 +2,3 @@ $(function () {
     map.init();
 
 });
-
