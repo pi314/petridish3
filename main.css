@@ -31,24 +31,26 @@ html, body {
     height: 100px;
 }
 
-#inventory {
-    margin: auto;
+.panel-block {
+    margin: 15px auto;
     padding: 5px;
     width: 160px;
     background: #333333;
 }
 
-#inventory-title {
+.panel-block > .title {
     color: lightgray;
     font-size: 20px;
     text-align: center;
 }
 
-#inventory > hr {
+.panel-block > hr {
     border-color: lightgray;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
-#inventory-cells {
+.panel-block > .content {
     min-height: 20px;
 }
 
