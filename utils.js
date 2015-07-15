@@ -1,5 +1,12 @@
 DIAMAND = 0;
 SQUARE = 1;
+SHAPE_VECTOR = {
+    DIAMAND: [[-1, 0], [0, 1], [1, 0], [0, -1]],
+    SQUARE: [[-1, 0], [-1, 1], [0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1]],
+};
+
+PULSE_INTERVAL_UNIT = 50;
+PULSE_DELAY_UNIT = 10;
 
 function to_hex (d, padding) {
     var h = d.toString(16);

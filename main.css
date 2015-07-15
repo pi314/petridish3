@@ -70,6 +70,13 @@ html, body {
     display: inline-block;
 }
 
+.pulse-block {
+    width: 22px;
+    height: 22px;
+    margin: 0;
+    display: inline-block;
+}
+
 .cell {
     border-radius: 3px;
 }

@@ -42,3 +42,31 @@ cell.prototype.bind_dom = function (dom) {
     this.set_color(this.R, this.G, this.B);
 };
 
+cell.prototype.pulse_loop = function () {
+    if (!this.is_center) { return; }
+    var t = this;
+
+    this.dom.removeClass('block').addClass('pulse-block');
+
+    setTimeout(function () {
+        t.dom.removeClass('pulse-block').addClass('block');
+    }, t.pulse_delay * PULSE_DELAY_UNIT);
+
+    setTimeout(function () {
+        t.pulse_loop();
+    }, t.pulse_interval * PULSE_INTERVAL_UNIT);
+};
+
+cell.prototype.set_center = function (c) {
+    if (c == undefined) {
+        c = true;
+    }
+
+    if (this.is_center == c) { return; }
+
+    this.is_center = c;
+    if (this.is_center) {
+        var t = this;
+        setTimeout(t.pulse_loop(), 0);
+    }
+};
