@@ -63,11 +63,31 @@ html, body {
     height: 22px;
 }
 
-.b-empty {
+.block {
     width: 20px;
     height: 20px;
     margin: 1px;
     display: inline-block;
+}
+
+.cell {
+    border-radius: 3px;
+    background: lime;
+}
+
+.empty {
     background: #171717;
 }
 
+.inventory-cell-item {
+    margin: 10px 0 10px 20px;
+}
+
+.cell-amount {
+    display: inline-block;
+    font-size: 17px;
+    line-height: 20px;
+    vertical-align: top;
+    margin-left: 10px;
+    color: lightgray;
+}

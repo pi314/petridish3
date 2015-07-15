@@ -8,7 +8,7 @@ map.init = function () {
     for (var i = 0; i < map.HEIGHT; i++) {
         s += '<div class="row">';
         for (var j = 0; j < map.WIDTH; j++) {
-            s += '<div id="cell-'+ i +'-'+ j +'" class="b-empty"></div>';
+            s += '<div id="cell-'+ i +'-'+ j +'" class="block empty"></div>';
         }
         s += '</div>';
     }
