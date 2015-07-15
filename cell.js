@@ -1,5 +1,5 @@
 function cell () {
-    this.dom_id = null;
+    this.dom = null;
     this.is_center = false;
     this.R = 0;
     this.G = 0;
@@ -28,16 +28,17 @@ cell.prototype.set_color = function (r, g, b) {
     this.R = r;
     this.G = g;
     this.B = b;
-    if (this.dom_id != null) {
-        $(this.dom_id).css(
+    if (this.dom != null) {
+        this.dom.css(
             'background',
             'rgb('+ this.R +','+ this.G +','+ this.B +')'
         );
     }
 };
 
-cell.prototype.bind_dom = function (dom_id) {
-    this.dom_id = dom_id;
-    $(this.dom_id).addClass('cell');
+cell.prototype.bind_dom = function (dom) {
+    this.dom = dom;
+    this.dom.addClass('cell');
     this.set_color(this.R, this.G, this.B);
 };
+
