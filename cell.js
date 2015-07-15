@@ -42,18 +42,19 @@ cell.prototype.bind_dom = function (dom) {
     this.set_color(this.R, this.G, this.B);
 };
 
-cell.prototype.pulse_loop = function () {
+cell.prototype.generate_pulse = function () {
     if (!this.is_center) { return; }
     var t = this;
 
-    this.dom.removeClass('block').addClass('pulse-block');
+    if (t.dom) {
+        t.dom.removeClass('block').addClass('pulse-block');
+        setTimeout(function () {
+            t.dom.removeClass('pulse-block').addClass('block');
+        }, t.pulse_delay * PULSE_DELAY_UNIT);
+    }
 
     setTimeout(function () {
-        t.dom.removeClass('pulse-block').addClass('block');
-    }, t.pulse_delay * PULSE_DELAY_UNIT);
-
-    setTimeout(function () {
-        t.pulse_loop();
+        t.generate_pulse();
     }, t.pulse_interval * PULSE_INTERVAL_UNIT);
 };
 
@@ -67,6 +68,6 @@ cell.prototype.set_center = function (c) {
     this.is_center = c;
     if (this.is_center) {
         var t = this;
-        setTimeout(t.pulse_loop(), 0);
+        setTimeout(t.generate_pulse(), 0);
     }
 };
