@@ -25,7 +25,21 @@ map.init = function () {
 };
 
 map.put_cell = function (c, row, col) {
-    petridish[row][col] = c;
-    console.log(c, $(format('#cell-{}-{}', row, col)));
-    c.bind_dom($(format('#cell-{}-{}', row, col)));
+    if (0 <= row && row < map.HEIGHT && 0 <= col && col < map.WIDTH) {
+        petridish[row][col] = c;
+        c.bind_dom($(format('#cell-{}-{}', row, col)));
+    }
 };
+
+map.get_coordinate = function (c) {
+    if (c.dom == null) { return null; }
+    var res = /^cell-(\d+)-(\d+)$/.exec(c.dom.attr('id'));
+    if (res == null) { return null; }
+    return [parseInt(res[1]), parseInt(res[2])];
+}
+
+map.get_cell_at = function (row, col) {
+    if (row < 0 || row >= map.HEIGHT) { return null; }
+    if (col < 0 || col >= map.WIDTH) { return null; }
+    return petridish[row][col];
+}

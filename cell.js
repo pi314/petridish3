@@ -1,6 +1,4 @@
 function cell () {
-    this.dom = null;
-    this.is_center = false;
     this.R = 0;
     this.G = 0;
     this.B = 0;
@@ -9,6 +7,13 @@ function cell () {
     this.pulse_delay = 0;           // unit: 10ms
     this.growth_delay = 0;          // unit: 500ms
     this.allow_neighbors = 255;
+
+    this.dom = null;
+    this.is_center = false;
+    this.growth_counter = 0;
+    this.growth_direction = null;
+    this.pulse_queue = [];
+    $(this).bind('MESSAGE', this.receive);
 }
 
 cell.prototype.gene = function () {
@@ -46,16 +51,46 @@ cell.prototype.generate_pulse = function () {
     if (!this.is_center) { return; }
     var t = this;
 
-    if (t.dom) {
-        t.dom.removeClass('block').addClass('pulse-block');
-        setTimeout(function () {
-            t.dom.removeClass('pulse-block').addClass('block');
-        }, t.pulse_delay * PULSE_DELAY_UNIT);
+    if (t.dom != null) {
+        $(t).trigger('MESSAGE', [MSG_WAVE, t.dom.attr('id'), [0, 0]]);
     }
 
     setTimeout(function () {
         t.generate_pulse();
     }, t.pulse_interval * PULSE_INTERVAL_UNIT);
+};
+
+cell.prototype.send = function (type, value, direction) {
+    if (this.dom == null) { return; }
+    var coord = map.get_coordinate(this);
+    if (coord == null) { return; }
+    var v = vector_add(coord, direction);
+    var other_cell = map.get_cell_at(v[0], v[1]);
+    if (other_cell == null) { return; }
+    $(other_cell).trigger('MESSAGE', [type, value, [-direction[0], -direction[1]]]);
+};
+
+cell.prototype.receive = function (e, type, value, from) {
+    var t = this;
+    t.pulse_queue.push(from);
+    if (t.dom) {
+        t.dom.removeClass('block').addClass('pulse-block');
+    }
+
+    if (t.pulse_queue.length == 1) {
+        setTimeout(function () {
+            if (t.dom) {
+                t.dom.removeClass('pulse-block').addClass('block');
+            }
+            for (var i = 0; i < SHAPE_VECTOR[t.shape].length; i++) {
+                var j = array_index_of(t.pulse_queue, SHAPE_VECTOR[t.shape][i]);
+                if (j == -1) {
+                    t.send(type, value, SHAPE_VECTOR[t.shape][i]);
+                }
+            }
+            while (t.pulse_queue.length) { t.pulse_queue.pop(); }
+        }, t.pulse_delay * PULSE_DELAY_UNIT);
+    }
 };
 
 cell.prototype.set_center = function (c) {
@@ -70,4 +105,17 @@ cell.prototype.set_center = function (c) {
         var t = this;
         setTimeout(t.generate_pulse(), 0);
     }
+};
+
+cell.prototype.copy = function () {
+    var c = new cell();
+    c.R = this.R;
+    c.G = this.G;
+    c.B = this.B;
+    c.shape = this.shape;
+    c.pulse_interval = this.pulse_interval;
+    c.pulse_delay = this.pulse_delay;
+    c.growth_delay = this.growth_delay;
+    c.allow_neighbors = this.allow_neighbors;
+    return c;
 };
