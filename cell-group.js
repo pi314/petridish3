@@ -75,9 +75,7 @@ cell_group.prototype.generate_pulse = function () {
     if (t.growth_counter >= t.growth_delay) {
         t.grow_flag = true;
         t.grow_distance = parseInt(sample(Object.keys(t.member).filter(function (x) { return x != 'Infinity'})));
-        console.log(t.grow_distance);
         t.growth_counter = 0;
-        $(format('#cell-{}-{}', t.row, t.col)).text(t.grow_distance);
     }
 
     t.wave_up();
@@ -96,7 +94,9 @@ cell_group.prototype.wave_up = function (wave_distance) {
     }
 
     if (!(wave_distance in this.member) || Object.keys(this.member[wave_distance]).length == 0) {
-        console.log('edge');
+        if (t.grow_flag && wave_distance == t.grow_distance) {
+            t.grow_distance = 0;
+        }
         return;
     }
 
@@ -104,15 +104,12 @@ cell_group.prototype.wave_up = function (wave_distance) {
     for (var i in this.member[wave_distance]) {
         var this_c = t.member[wave_distance][i];
         this_c.dom.removeClass('block').addClass('pulse-block');
-        if (this_c.distance != 0) {
-            this_c.dom.text(this_c.distance);
-        }
         var this_coord = new vector(this_c.row, this_c.col);
         for (var j = 0; j < SHAPE_VECTOR[this.shape].length; j++) {
             var neighbor_coord = this_coord.add(SHAPE_VECTOR[this.shape][j]);
             var neighbor_cell = map.get_cell_at(neighbor_coord)
-            if (neighbor_cell == null) {
-                if (wave_distance == t.grow_distance && t.grow_flag) {
+            if (neighbor_cell == EMPTY) {
+                if (t.grow_flag && wave_distance == t.grow_distance) {
                     available_space.push(neighbor_coord);
                 }
             } else if (neighbor_cell.distance == Infinity || this_c.distance + 1 < neighbor_cell.distance) {
@@ -121,13 +118,13 @@ cell_group.prototype.wave_up = function (wave_distance) {
         }
     }
 
-    if (wave_distance == t.grow_distance) {
+    if (t.grow_flag && wave_distance == t.grow_distance) {
         var neighbor_coord = sample(available_space)
         if (neighbor_coord != undefined) {
             t.put_cell(neighbor_coord);
+            t.grow_flag = false;
         } else {
             t.grow_distance += 1;
-            $(format('#cell-{}-{}', t.row, t.col)).text(t.grow_distance);
         }
     }
 

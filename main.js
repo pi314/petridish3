@@ -7,7 +7,7 @@ $(function () {
     cg.pulse_delay = 10;
     cg.growth_delay = 2;
     cg.allow_neighbors = 255;
-    cg.put_cell(10, 10);
-    cg.set_center(10, 10);
+    cg.put_cell(5, 5);
+    cg.set_center(5, 5);
 
 });

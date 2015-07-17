@@ -1,6 +1,9 @@
 DIAMAND = 0;
 SQUARE = 1;
 
+OUT_OF_MAP = 1;
+EMPTY = 2;
+
 function vector (row, col) {
     this.row = row;
     this.col = col;

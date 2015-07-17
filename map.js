@@ -18,7 +18,7 @@ map.init = function () {
     for (var i = 0; i < map.HEIGHT; i++) {
         petridish[i] = [];
         for (var j = 0; j < map.WIDTH; j++) {
-            petridish[i][j] = null;
+            petridish[i][j] = EMPTY;
         }
     }
 
@@ -47,7 +47,7 @@ map.get_cell_at = function (v, col) {
     if (!(v instanceof vector)) {
         v = new vector(v, col);
     }
-    if (v.row < 0 || v.row >= map.HEIGHT) { return null; }
-    if (v.col < 0 || v.col >= map.WIDTH) { return null; }
+    if (v.row < 0 || v.row >= map.HEIGHT) { return OUT_OF_MAP; }
+    if (v.col < 0 || v.col >= map.WIDTH) { return OUT_OF_MAP; }
     return petridish[v.row][v.col];
 }
