@@ -24,10 +24,15 @@ map.init = function () {
 
 };
 
-map.put_cell = function (c, row, col) {
-    if (0 <= row && row < map.HEIGHT && 0 <= col && col < map.WIDTH) {
-        petridish[row][col] = c;
-        c.bind_dom($(format('#cell-{}-{}', row, col)));
+map.put_cell = function (c, v, col) {
+    if (!(v instanceof vector)) {
+        v = new vector(v, col);
+    }
+    if (0 <= v.row && v.row < map.HEIGHT && 0 <= v.col && v.col < map.WIDTH) {
+        petridish[v.row][v.col] = c;
+        c.row = v.row;
+        c.col = v.col;
+        c.bind_dom($(format('#cell-{}-{}', v.row, v.col)).removeClass('empty'));
     }
 };
 
@@ -38,8 +43,11 @@ map.get_coordinate = function (c) {
     return [parseInt(res[1]), parseInt(res[2])];
 }
 
-map.get_cell_at = function (row, col) {
-    if (row < 0 || row >= map.HEIGHT) { return null; }
-    if (col < 0 || col >= map.WIDTH) { return null; }
-    return petridish[row][col];
+map.get_cell_at = function (v, col) {
+    if (!(v instanceof vector)) {
+        v = new vector(v, col);
+    }
+    if (v.row < 0 || v.row >= map.HEIGHT) { return null; }
+    if (v.col < 0 || v.col >= map.WIDTH) { return null; }
+    return petridish[v.row][v.col];
 }

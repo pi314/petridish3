@@ -1,22 +1,57 @@
 DIAMAND = 0;
 SQUARE = 1;
 
-V_U = [-1, 0];
-V_L = [0, -1];
-V_R = [0, 1];
-V_D = [1, 0];
-V_UL = [-1, -1];
-V_UR = [-1, 1];
-V_DL = [1, -1];
-V_DR = [1, 1];
+function reverse_direction (direction) {
+    if (direction == O) { return O; }
+    else if (U <= direction && direction <= D) {
+        return 3 - direction;
+    } else {
+        return 11 - direction;
+    }
+}
+
+function vector (row, col) {
+    this.row = row;
+    this.col = col;
+    this.reverse = null;
+}
+
+vector.prototype.add = function (v) {
+    return new vector(this.row + v.row, this.col + v.col);
+};
+
+vector.prototype.equals = function (v) {
+    return this.row == v.row && this.col == v.col;
+}
+
+U = new vector(-1, 0);
+L = new vector(0, -1);
+R = new vector(0, 1);
+D = new vector(1, 0);
+UL = new vector(-1, -1);
+UR = new vector(-1, 1);
+DL = new vector(1, -1);
+DR = new vector(1, 1);
+O = new vector(0, 0);
+U.reverse = D;
+D.reverse = U;
+L.reverse = R;
+R.reverse = L;
+UL.reverse = DR;
+DR.reverse = UL;
+DL.reverse = UR;
+UR.reverse = DL;
+O.reverse = O;
+
 SHAPE_VECTOR = {};
-SHAPE_VECTOR[DIAMAND] = [V_U, V_L, V_R, V_D];
-SHAPE_VECTOR[SQUARE] = [V_U, V_L, V_R, V_D, V_UL, V_UR, V_DL, V_DR];
+SHAPE_VECTOR[DIAMAND] = [U, L, R, D];
+SHAPE_VECTOR[SQUARE] = [U, L, R, D, UL, UR, DL, DR];
 
 PULSE_INTERVAL_UNIT = 50;
 PULSE_DELAY_UNIT = 10;
 
 MSG_WAVE = 0;
+MSG_GROW = 1;
 
 function to_hex (d, padding) {
     var h = d.toString(16);
@@ -33,16 +68,7 @@ function format (s) {
     return s;
 }
 
-function array_index_of (ary, obj) {
-    /* This function is not correct in all cases, but may be enough for me */
-    for (var i = 0; i < ary.length; i++) {
-        if (ary[i].toString() == obj.toString()) {
-            return i;
-        }
-    }
-    return -1;
+function sample (sample_space) {
+    return sample_space[Math.floor(Math.random() * sample_space.length)];
 }
 
-function vector_add (v1, v2) {
-    return [v1[0] + v2[0], v1[1] + v2[1]];
-}

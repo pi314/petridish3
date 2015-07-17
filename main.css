@@ -4,6 +4,7 @@ div {
     padding: 0;
     font-family: monospace;
     font-size: 0;
+    vertical-align: top;
 }
 
 html, body {
@@ -18,7 +19,6 @@ html, body {
 }
 
 #control-panel {
-    vertical-align: top;
     display: inline-block;
     width: 200px;
     height: 100%;
@@ -79,6 +79,8 @@ html, body {
 
 .cell {
     border-radius: 3px;
+    font-size: 18px;
+    color: black;
 }
 
 .empty {

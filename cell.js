@@ -1,4 +1,5 @@
 function cell () {
+    // cell gene related attributes
     this.R = 0;
     this.G = 0;
     this.B = 0;
@@ -8,12 +9,29 @@ function cell () {
     this.growth_delay = 0;          // unit: 500ms
     this.allow_neighbors = 255;
 
+    // cell instance related attributes
     this.dom = null;
+    this.row = null;
+    this.col = null;
     this.is_center = false;
     this.growth_counter = 0;
-    this.growth_direction = null;
+    // to record where pulse from
     this.pulse_queue = [];
+    this.pulse_queue[-1] = [];
+    this.pulse_queue[0] = [];
+    this.pulse_queue[1] = [];
+    this.pulse_queue_dirty = false;
+    this.distance_map = [];
+    for (var i = -1; i <= 1; i++) {
+        this.distance_map[i] = [];
+        this.distance_map[i][-1] = Infinity;
+        this.distance_map[i][0] = Infinity;
+        this.distance_map[i][1] = Infinity;
+    }
     $(this).bind('MESSAGE', this.receive);
+    this.master = null;
+    this.master_direction = null;
+    this.growth_flag = false;
 }
 
 cell.prototype.gene = function () {
@@ -52,44 +70,102 @@ cell.prototype.generate_pulse = function () {
     var t = this;
 
     if (t.dom != null) {
-        $(t).trigger('MESSAGE', [MSG_WAVE, t.dom.attr('id'), [0, 0]]);
+        // no dom element, no pulse generated
+        var msg = {};
+        msg.type = MSG_WAVE;
+        msg.master = t.dom.attr('id');
+        msg.distance = 0;
+        t.send(msg, O);
+        if (t.growth_counter >= t.growth_delay) {
+            t.grow_cell();
+            t.growth_counter = 0;
+        }
     }
 
+    // next pulse
     setTimeout(function () {
+        t.growth_counter += t.pulse_interval * PULSE_INTERVAL_UNIT;
         t.generate_pulse();
     }, t.pulse_interval * PULSE_INTERVAL_UNIT);
 };
 
-cell.prototype.send = function (type, value, direction) {
-    if (this.dom == null) { return; }
-    var coord = map.get_coordinate(this);
-    if (coord == null) { return; }
-    var v = vector_add(coord, direction);
-    var other_cell = map.get_cell_at(v[0], v[1]);
-    if (other_cell == null) { return; }
-    $(other_cell).trigger('MESSAGE', [type, value, [-direction[0], -direction[1]]]);
+cell.prototype.grow_cell = function () {
+    var t = this;
+    if (t.row == null) { return; }
+    var new_cell_direction = sample([U, L, R, D].filter(function (x) {
+        return t.distance_map[x.row][x.col] > t.distance_map[0][0];
+    }));
+    var new_cell_coord = new_cell_direction.add(new vector(t.row, t.col));
+    var target_cell = map.get_cell_at(new_cell_coord);
+    if (target_cell == null) {
+        map.put_cell(t.copy(), new_cell_coord);
+    } else if (target_cell.gene() == t.gene()) {
+        var msg = {};
+        msg.type = MSG_GROW;
+        msg.master = this.dom.attr('id');
+        msg.distance = 0;
+        t.send(msg, new_cell_direction)
+    }
 };
 
-cell.prototype.receive = function (e, type, value, from) {
-    var t = this;
-    t.pulse_queue.push(from);
-    if (t.dom) {
-        t.dom.removeClass('block').addClass('pulse-block');
-    }
+cell.prototype.send = function (msg, direction) {
+    if (this.row == null) { return; }
+    var v = new vector(this.row, this.col).add(direction);
+    var other_cell = map.get_cell_at(v);
+    if (other_cell == null) { return; }
+    $(other_cell).trigger('MESSAGE', [msg, direction.reverse]);
+};
 
-    if (t.pulse_queue.length == 1) {
-        setTimeout(function () {
-            if (t.dom) {
-                t.dom.removeClass('pulse-block').addClass('block');
-            }
-            for (var i = 0; i < SHAPE_VECTOR[t.shape].length; i++) {
-                var j = array_index_of(t.pulse_queue, SHAPE_VECTOR[t.shape][i]);
-                if (j == -1) {
-                    t.send(type, value, SHAPE_VECTOR[t.shape][i]);
+cell.prototype.receive = function (e, msg, from) {
+    var t = this;
+    switch (msg.type) {
+    case MSG_WAVE:
+        t.pulse_queue[from.row][from.col] = msg;
+        t.distance_map[from.row][from.col] = msg.distance;
+        if (msg.distance + 1 < t.distance_map[0][0]) {
+            t.distance_map[0][0] = msg.distance + 1;
+        }
+        switch (t.master) {
+        case null:
+            t.master = msg.master;
+            break;
+        case msg.master:
+            break;
+        default:
+            break;
+        }
+        t.pulse_queue_dirty = true;
+        if (t.dom) {
+            t.dom.removeClass('block').addClass('pulse-block');
+            // t.dom.text(t.distance_map[0][0]);
+        }
+
+        if (t.pulse_queue_dirty) {
+            setTimeout(function () {
+                var msg = {};
+                msg.type = MSG_WAVE;
+                msg.distance = t.distance_map[0][0];
+                msg.master = t.master;
+                if (t.dom) {
+                    t.dom.removeClass('pulse-block').addClass('block');
                 }
-            }
-            while (t.pulse_queue.length) { t.pulse_queue.pop(); }
-        }, t.pulse_delay * PULSE_DELAY_UNIT);
+                for (var i = 0; i < SHAPE_VECTOR[t.shape].length; i++) {
+                    var sv = SHAPE_VECTOR[t.shape][i]
+                    if (t.distance_map[sv.row][sv.col] > t.distance_map[0][0]) {
+                        t.send(msg, SHAPE_VECTOR[t.shape][i]);
+                    }
+                }
+                t.pulse_queue_dirty = false;
+                if (t.growth_flag) {
+                    t.grow_cell();
+                    t.growth_flag = false;
+                }
+            }, t.pulse_delay * PULSE_DELAY_UNIT);
+        }
+        break;
+    case MSG_GROW:
+        t.growth_flag = true;
+        break;
     }
 };
 
