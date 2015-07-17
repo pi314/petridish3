@@ -74,8 +74,10 @@ cell_group.prototype.generate_pulse = function () {
 
     if (t.growth_counter >= t.growth_delay) {
         t.grow_flag = true;
-        t.grow_distance = sample(Object.keys(t.member).filter(function (x) { return x != 'Infinity'}));
+        t.grow_distance = parseInt(sample(Object.keys(t.member).filter(function (x) { return x != 'Infinity'})));
+        console.log(t.grow_distance);
         t.growth_counter = 0;
+        $(format('#cell-{}-{}', t.row, t.col)).text(t.grow_distance);
     }
 
     t.wave_up();
@@ -93,10 +95,18 @@ cell_group.prototype.wave_up = function (wave_distance) {
         wave_distance = 0;
     }
 
+    if (!(wave_distance in this.member) || Object.keys(this.member[wave_distance]).length == 0) {
+        console.log('edge');
+        return;
+    }
+
     var available_space = [];
     for (var i in this.member[wave_distance]) {
         var this_c = t.member[wave_distance][i];
         this_c.dom.removeClass('block').addClass('pulse-block');
+        if (this_c.distance != 0) {
+            this_c.dom.text(this_c.distance);
+        }
         var this_coord = new vector(this_c.row, this_c.col);
         for (var j = 0; j < SHAPE_VECTOR[this.shape].length; j++) {
             var neighbor_coord = this_coord.add(SHAPE_VECTOR[this.shape][j]);
@@ -117,6 +127,7 @@ cell_group.prototype.wave_up = function (wave_distance) {
             t.put_cell(neighbor_coord);
         } else {
             t.grow_distance += 1;
+            $(format('#cell-{}-{}', t.row, t.col)).text(t.grow_distance);
         }
     }
 
