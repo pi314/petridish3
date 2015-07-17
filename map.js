@@ -8,7 +8,7 @@ map.init = function () {
     for (var i = 0; i < map.HEIGHT; i++) {
         s += '<div class="row">';
         for (var j = 0; j < map.WIDTH; j++) {
-            s += '<div id="cell-'+ i +'-'+ j +'" class="block empty"></div>';
+            s += format('<div id="cell-{}-{}" class="block empty"></div>', i, j);
         }
         s += '</div>';
     }
@@ -32,7 +32,7 @@ map.put_cell = function (c, v, col) {
         petridish[v.row][v.col] = c;
         c.row = v.row;
         c.col = v.col;
-        c.bind_dom($(format('#cell-{}-{}', v.row, v.col)).removeClass('empty'));
+        c.bind_dom($(format('#cell-{}-{}', v.row, v.col)));
     }
 };
 

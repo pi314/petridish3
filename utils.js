@@ -1,15 +1,6 @@
 DIAMAND = 0;
 SQUARE = 1;
 
-function reverse_direction (direction) {
-    if (direction == O) { return O; }
-    else if (U <= direction && direction <= D) {
-        return 3 - direction;
-    } else {
-        return 11 - direction;
-    }
-}
-
 function vector (row, col) {
     this.row = row;
     this.col = col;
