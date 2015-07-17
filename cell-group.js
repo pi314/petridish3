@@ -15,6 +15,9 @@ function cell_group (r, g, b) {
 
     // member cell list
     this.member = [];
+
+    this.growth_counter = 0;
+    this.grow_flag = false;
 }
 
 cell_group.prototype.gene = function () {
@@ -66,8 +69,12 @@ cell_group.prototype.set_distance = function (c, new_dist) {
 
 cell_group.prototype.generate_pulse = function () {
     if (this.row == null || this.col == null) { return; }
-    console.log('pulse');
     var t = this;
+
+    if (t.growth_counter >= t.growth_delay) {
+        t.grow_flag = true;
+        t.growth_counter = 0;
+    }
 
     t.wave_up();
 
@@ -89,8 +96,14 @@ cell_group.prototype.wave_up = function (wave_distance) {
         c.dom.removeClass('block').addClass('pulse-block');
         var v = new vector(c.row, c.col);
         for (var j = 0; j < SHAPE_VECTOR[this.shape].length; j++) {
-            var cc = map.get_cell_at(v.add(SHAPE_VECTOR[this.shape][j]))
-            if (cc != null && cc.distance == Infinity) {
+            var vv = v.add(SHAPE_VECTOR[this.shape][j]);
+            var cc = map.get_cell_at(vv)
+            if (cc == null) {
+                if (t.grow_flag) {
+                    t.put_cell(vv);
+                    t.grow_flag = false;
+                }
+            } else if (cc.distance == Infinity || c.distance + 1 < cc.distance) {
                 cc.set_distance(c.distance + 1);
             }
         }
