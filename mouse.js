@@ -13,6 +13,7 @@ mouse.select_inventory = function (cell_gene) {
         $('#{}'.format(mouse.selected_cell)).addClass('inventory-cell-item-selected');
         mouse.state = MOUSE_SELECT_INVENTORY;
         break;
+
     case MOUSE_SELECT_INVENTORY:
         if (mouse.selected_cell == cell_gene) {
             $('#{}'.format(mouse.selected_cell)).removeClass('inventory-cell-item-selected');
@@ -23,5 +24,6 @@ mouse.select_inventory = function (cell_gene) {
             $('#{}'.format(mouse.selected_cell)).addClass('inventory-cell-item-selected');
         }
         break;
+
     }
 };

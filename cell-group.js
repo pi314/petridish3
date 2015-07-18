@@ -1,3 +1,16 @@
+PULSE_INTERVAL_UNIT = 50;
+PULSE_DELAY_UNIT = 10;
+
+MSG_WAVE = 0;
+MSG_GROW = 1;
+
+DIAMAND = 0;
+SQUARE = 1;
+
+SHAPE_VECTOR = {};
+SHAPE_VECTOR[DIAMAND] = [U, L, R, D];
+SHAPE_VECTOR[SQUARE] = [U, L, R, D, UL, UR, DL, DR];
+
 function cell_group (r, g, b) {
     // cell gene related attributes
     this.R = r;

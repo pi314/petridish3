@@ -1,3 +1,6 @@
+OUT_OF_MAP = 1;
+EMPTY = 2;
+
 var map = {};
 
 map.WIDTH = 27;

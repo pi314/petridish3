@@ -1,9 +1,3 @@
-DIAMAND = 0;
-SQUARE = 1;
-
-OUT_OF_MAP = 1;
-EMPTY = 2;
-
 function vector (row, col) {
     this.row = row;
     this.col = col;
@@ -36,16 +30,6 @@ DR.reverse = UL;
 DL.reverse = UR;
 UR.reverse = DL;
 O.reverse = O;
-
-SHAPE_VECTOR = {};
-SHAPE_VECTOR[DIAMAND] = [U, L, R, D];
-SHAPE_VECTOR[SQUARE] = [U, L, R, D, UL, UR, DL, DR];
-
-PULSE_INTERVAL_UNIT = 50;
-PULSE_DELAY_UNIT = 10;
-
-MSG_WAVE = 0;
-MSG_GROW = 1;
 
 function to_hex (d, padding) {
     var h = d.toString(16);
