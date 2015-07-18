@@ -13,15 +13,17 @@ function cell_group (r, g, b) {
     this.row = null;
     this.col = null;
 
-    // member cell list
+    // member cell list, indexed by their distance (to center)
     this.member = {};
 
-    this.growth_counter = 0;
+    // cell growth related attributes
     this.grow_flag = false;
+    this.growth_counter = 0;
     this.grow_distance = null;
 }
 
-cell_group.prototype.gene = function () {
+cell_group.prototype.gene = function (new_gene) {
+    // get/set the cell's gene, not finished yet
     var ret = '';
     ret += to_hex(this.R, 2);
     ret += to_hex(this.G, 2);
@@ -43,6 +45,7 @@ cell_group.prototype.put_cell = function (v, col) {
     if (!(c.distance in this.member)) {
         this.member[c.distance] = {};
     }
+    // the cell get its id AFTER the it is on the map
     this.member[c.distance][c.id] = c;
 };
 
@@ -74,7 +77,11 @@ cell_group.prototype.generate_pulse = function () {
 
     if (t.growth_counter >= t.growth_delay) {
         t.grow_flag = true;
-        t.grow_distance = parseInt(sample(Object.keys(t.member).filter(function (x) { return x != 'Infinity'})));
+        t.grow_distance = parseInt(sample(
+            Object.keys(t.member).filter(
+                function (x) { return x != 'Infinity'}
+            )
+        ));
         t.growth_counter = 0;
     }
 
@@ -93,8 +100,12 @@ cell_group.prototype.wave_up = function (wave_distance) {
         wave_distance = 0;
     }
 
-    if (!(wave_distance in this.member) || Object.keys(this.member[wave_distance]).length == 0) {
+    if (!(wave_distance in this.member) ||
+            Object.keys(this.member[wave_distance]).length == 0) {
+        // no further cells, stop pulsing
         if (t.grow_flag && wave_distance == t.grow_distance) {
+            // unfortunately we did not successfully grow new cell
+            // find a new place from start
             t.grow_distance = 0;
         }
         return;
@@ -102,23 +113,32 @@ cell_group.prototype.wave_up = function (wave_distance) {
 
     var available_space = [];
     for (var i in this.member[wave_distance]) {
-        var this_c = t.member[wave_distance][i];
-        this_c.dom.removeClass('block').addClass('pulse-block');
-        var this_coord = new vector(this_c.row, this_c.col);
+        var this_cell = t.member[wave_distance][i];
+        this_cell.dom.removeClass('block').addClass('pulse-block');
+        var this_coord = new vector(this_cell.row, this_cell.col);
+        // check surrounding cells (according to their pulse shape)
         for (var j = 0; j < SHAPE_VECTOR[this.shape].length; j++) {
             var neighbor_coord = this_coord.add(SHAPE_VECTOR[this.shape][j]);
             var neighbor_cell = map.get_cell_at(neighbor_coord)
+
             if (neighbor_cell == EMPTY) {
+                // neighbor cell is empty, add it into check list
                 if (t.grow_flag && wave_distance == t.grow_distance) {
                     available_space.push(neighbor_coord);
                 }
-            } else if (neighbor_cell.distance == Infinity || this_c.distance + 1 < neighbor_cell.distance) {
-                neighbor_cell.set_distance(this_c.distance + 1);
+            } else if (neighbor_cell.group == this_cell.group) {
+                // neighbor cell is not empty, and we are in same group
+                // update its distance
+                if (neighbor_cell.distance == Infinity ||
+                        this_cell.distance + 1 < neighbor_cell.distance) {
+                    neighbor_cell.set_distance(this_cell.distance + 1);
+                }
             }
         }
     }
 
     if (t.grow_flag && wave_distance == t.grow_distance) {
+        // we need to grow a new cell, check available place to put
         var neighbor_coord = sample(available_space)
         if (neighbor_coord != undefined) {
             t.put_cell(neighbor_coord);
