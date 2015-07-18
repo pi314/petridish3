@@ -8,6 +8,10 @@ $(function () {
     cg.growth_delay = 2;
     cg.allow_neighbors = 255;
     inventory.add(cg, 1);
+    cg.R = 0;
+    cg.G = 255;
+    cg.B = 255;
+    inventory.add(cg, 1);
     cg.R = 255;
     cg.G = 0;
     cg.B = 0;

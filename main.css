@@ -92,7 +92,15 @@ html, body {
     padding: 5px 20px;
 }
 
+.inventory-cell-item-selected {
+    background: #555555;
+}
+
 .inventory-cell-item:hover {
+    background: #444444;
+}
+
+.inventory-cell-item-selected:hover {
     background: #555555;
 }
 
