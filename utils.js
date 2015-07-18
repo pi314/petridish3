@@ -55,14 +55,14 @@ function to_hex (d, padding) {
     return h;
 }
 
-function format (s) {
-    for (var i = 1; i < arguments.length; i++) {
-        s = s.replace('{}', arguments[i]);
-    }
-    return s;
-}
-
 function sample (sample_space) {
     return sample_space[Math.floor(Math.random() * sample_space.length)];
 }
 
+String.prototype.format = function () {
+    var ret = this;
+    for (var i = 0; i < arguments.length; i++) {
+        ret = ret.replace('{}', arguments[i]);
+    }
+    return ret;
+}

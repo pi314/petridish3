@@ -1,6 +1,8 @@
 var inventory = {};
 
-inventory.add = function (cell_gene, amount) {
+inventory.add = function (cg, amount) {
+    var cell_gene = cg.gene();
+
     if (amount == undefined) {
         amount = 1;
     }
@@ -15,5 +17,6 @@ inventory.add = function (cell_gene, amount) {
         $('#inventory-cells').append(d);
     }
     inventory[cell_gene] += amount;
-    $('#'+ cell_gene +' > .cell-amount').text(inventory[cell_gene]);
+    $('#{} > .cell'.format(cell_gene)).css('background', 'rgb({}, {}, {})'.format(cg.R, cg.G, cg.B));
+    $('#{} > .cell-amount'.format(cell_gene)).text(inventory[cell_gene]);
 };

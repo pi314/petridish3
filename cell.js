@@ -11,7 +11,7 @@ cell.prototype.bind_dom = function (dom) {
     this.dom = dom;
     this.dom.addClass('cell').removeClass('empty');
     var g = this.group;
-    this.dom.css('background', format('rgb({}, {}, {})', g.R, g.G, g.B));
+    this.dom.css('background', 'rgb({}, {}, {})'.format(g.R, g.G, g.B));
     this.id = dom.attr('id');
 };
 
