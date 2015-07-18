@@ -15,8 +15,8 @@ inventory.add = function (cg, amount) {
         d.append(c);
         d.append(n);
         $('#inventory-cells').append(d);
-        d.click(function () {
-            mouse.select_inventory(this.id);
+        d.click(function (e) {
+            mouse.select_inventory(e, this.id);
         });
     }
     inventory[cell_gene] += amount;

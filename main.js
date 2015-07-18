@@ -17,4 +17,10 @@ $(function () {
     cg.B = 0;
     inventory.add(cg, 1);
 
+    $(document).mousemove(function (e) {
+        if (mouse.state == MOUSE_SELECT_INVENTORY) {
+            mouse.mousemove(e.pageY, e.pageX);
+        }
+    });
+
 });
