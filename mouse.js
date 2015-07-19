@@ -57,14 +57,37 @@ mouse.hide = function () {
 
 mouse.enter_block = function (e) {
     if (mouse.state == MOUSE_HOLD_CELL) {
-        $(this).addClass('cell cell-shadow');
-        $(this).css('background', mouse.color);
+        var coord = parse_id($(this).attr('id'));
+        if (map.get_cell_at(coord) == EMPTY) {
+            $(this).addClass('cell cell-shadow');
+            $(this).css('background', mouse.color);
+        }
     }
 };
 
 mouse.leave_block = function (e) {
     if (mouse.state == MOUSE_HOLD_CELL) {
-        $(this).removeClass('cell cell-shadow');
+        var coord = parse_id($(this).attr('id'));
+        if (map.get_cell_at(coord) == EMPTY) {
+            $(this).removeClass('cell cell-shadow');
+            $(this).removeAttr('style');
+        }
+    }
+};
+
+mouse.click_block = function (e) {
+    if (mouse.state == MOUSE_HOLD_CELL) {
+        var coord = parse_id($(this).attr('id'));
+        $(this).removeClass('cell-shadow');
         $(this).removeAttr('style');
+        var cg = new cell_group(mouse.selected_cell_gene);
+        cg.put_cell(coord);
+        cg.set_center(coord);
+
+        mouse.hide();
+        mouse.state = MOUSE_FREE;
+
+        inventory.sub(mouse.selected_cell_gene);
+        $('#{}'.format(mouse.selected_cell_gene)).removeClass('inventory-cell-item-selected');
     }
 };

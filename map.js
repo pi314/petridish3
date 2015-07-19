@@ -18,7 +18,10 @@ map.init = function () {
     $('#petridish').append(s);
     for (var i = 0; i < map.HEIGHT; i++) {
         for (var j = 0; j < map.WIDTH; j++) {
-            $('#cell-{}-{}'.format(i, j)).mouseenter(mouse.enter_block).mouseleave(mouse.leave_block);
+            $('#cell-{}-{}'.format(i, j))
+                .mouseenter(mouse.enter_block)
+                .mouseleave(mouse.leave_block)
+                .click(mouse.click_block);
         }
     }
 

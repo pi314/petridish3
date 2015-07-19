@@ -18,3 +18,9 @@ cell.prototype.bind_dom = function (dom) {
 cell.prototype.set_distance = function (new_dist) {
     this.group.set_distance(this, new_dist);
 };
+
+function parse_id (id) {
+    var coord = /^cell-(\d+)-(\d+)$/.exec(id);
+    if (coord == null) { return null; }
+    return new vector(int(coord[1]), int(coord[2]));
+};

@@ -9,7 +9,7 @@ inventory.add = function (cg, amount) {
 
     if (inventory[cell_gene] == undefined) {
         inventory[cell_gene] = 0;
-        var d = $('<div id="'+ cell_gene +'"class="inventory-cell-item">');
+        var d = $('<div id="{}"class="inventory-cell-item">'.format(cell_gene));
         var c = $('<div class="block cell">');
         var n = $('<div class="cell-amount">');
         d.append(c);
@@ -18,8 +18,23 @@ inventory.add = function (cg, amount) {
         d.click(function (e) {
             mouse.select_inventory(e, this.id);
         });
+    } else if (inventory[cell_gene] == 0) {
+        $('#{}'.format(cell_gene)).removeClass('hidden');
     }
     inventory[cell_gene] += amount;
     $('#{} > .cell'.format(cell_gene)).css('background', 'rgb({}, {}, {})'.format(cg.R, cg.G, cg.B));
     $('#{} > .cell-amount'.format(cell_gene)).text(inventory[cell_gene]);
+};
+
+inventory.sub = function (cell_gene, amount) {
+    if (amount == undefined) {
+        amount = 1;
+    }
+
+    inventory[cell_gene] -= amount;
+    $('#{} > .cell-amount'.format(cell_gene)).text(inventory[cell_gene]);
+
+    if (inventory[cell_gene] == 0) {
+        $('#{}'.format(cell_gene)).addClass('hidden');
+    }
 };

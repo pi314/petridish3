@@ -50,3 +50,7 @@ String.prototype.format = function () {
     }
     return ret;
 }
+
+String.prototype.slice = String.prototype.substring;
+
+int = parseInt;

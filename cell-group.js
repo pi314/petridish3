@@ -11,16 +11,28 @@ SHAPE_VECTOR = {};
 SHAPE_VECTOR[DIAMAND] = [U, L, R, D];
 SHAPE_VECTOR[SQUARE] = [U, L, R, D, UL, UR, DL, DR];
 
-function cell_group (r, g, b) {
+function cell_group (gene) {
     // cell gene related attributes
-    this.R = r;
-    this.G = g;
-    this.B = b;
-    this.shape = null;
-    this.pulse_interval = null;     // unit: 50ms
-    this.pulse_delay = null;        // unit: 10ms
-    this.growth_delay = null;       // unit: 500ms
-    this.allow_neighbors = null;
+    if (gene == undefined) {
+        // default null values
+        this.R = null;
+        this.G = null;
+        this.B = null;
+        this.shape = null;
+        this.pulse_interval = null;     // unit: 50ms
+        this.pulse_delay = null;        // unit: 10ms
+        this.growth_delay = null;       // unit: 500ms
+        this.allow_neighbors = null;
+    } else {
+        this.R = int(gene.slice(0, 2), 16);
+        this.G = int(gene.slice(2, 4), 16);
+        this.B = int(gene.slice(4, 6), 16);
+        this.shape = int(gene[6]);
+        this.pulse_interval = int(gene.slice(7, 9), 16);
+        this.pulse_delay = int(gene.slice(9, 10), 16);
+        this.growth_delay = int(gene.slice(10, 12), 16);
+        this.allow_neighbors = int(gene.slice(12, 14), 16);
+    }
 
     // center coordinate
     this.row = null;
@@ -36,7 +48,7 @@ function cell_group (r, g, b) {
 }
 
 cell_group.prototype.gene = function (new_gene) {
-    // get/set the cell's gene, not finished yet
+    // get the cell's gene
     var ret = '';
     ret += to_hex(this.R, 2);
     ret += to_hex(this.G, 2);
