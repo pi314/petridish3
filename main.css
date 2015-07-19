@@ -117,7 +117,14 @@ html, body {
     display: none;
 }
 
-#cursor-cell-icon {
+.cell-shadow {
     opacity: 0.7;
+}
+
+#cursor-cell-icon {
+    border-radius: 3px;
+    width: 10px;
+    height: 10px;
     position: fixed;
 }
+

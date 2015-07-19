@@ -1,49 +1,50 @@
 MOUSE_FREE = 0;
-MOUSE_SELECT_INVENTORY = 1;
+MOUSE_HOLD_CELL = 1;
 
 var mouse = {};
 
 mouse.state = MOUSE_FREE;
-mouse.selected_cell = null;
+mouse.selected_cell_gene = null;
+mouse.color = null;
 
 mouse.select_inventory = function (e, cell_gene) {
     switch (mouse.state) {
     case MOUSE_FREE:
-        mouse.selected_cell = cell_gene;
-        $('#{}'.format(mouse.selected_cell)).addClass('inventory-cell-item-selected');
-        mouse.state = MOUSE_SELECT_INVENTORY;
+        mouse.selected_cell_gene = cell_gene;
+        $('#{}'.format(mouse.selected_cell_gene)).addClass('inventory-cell-item-selected');
+        mouse.state = MOUSE_HOLD_CELL;
         mouse.mousemove(e.pageY, e.pageX);
-        mouse.set_color(mouse.selected_cell.substr(0, 6));
+        mouse.set_color(mouse.selected_cell_gene.substr(0, 6));
         mouse.show();
         break;
 
-    case MOUSE_SELECT_INVENTORY:
-        if (mouse.selected_cell == cell_gene) {
-            $('#{}'.format(mouse.selected_cell)).removeClass('inventory-cell-item-selected');
+    case MOUSE_HOLD_CELL:
+        if (mouse.selected_cell_gene == cell_gene) {
+            $('#{}'.format(mouse.selected_cell_gene)).removeClass('inventory-cell-item-selected');
             mouse.state = MOUSE_FREE;
             mouse.hide();
         } else {
-            $('#{}'.format(mouse.selected_cell)).removeClass('inventory-cell-item-selected');
-            mouse.selected_cell = cell_gene;
-            $('#{}'.format(mouse.selected_cell)).addClass('inventory-cell-item-selected');
-            mouse.set_color(mouse.selected_cell.substr(0, 6));
+            $('#{}'.format(mouse.selected_cell_gene)).removeClass('inventory-cell-item-selected');
+            mouse.selected_cell_gene = cell_gene;
+            $('#{}'.format(mouse.selected_cell_gene)).addClass('inventory-cell-item-selected');
+            mouse.set_color(mouse.selected_cell_gene.substr(0, 6));
         }
         break;
 
     }
 };
 
-mouse.mousemove = function (top, left) {
-    if (mouse.state == MOUSE_SELECT_INVENTORY) {
-        $('#cursor-cell-icon').css({
-            'top': top - 26,
-            'left': left + 3,
-        });
-    }
+mouse.mousemove = function (top, left, force) {
+    if (mouse.state != MOUSE_HOLD_CELL) { return; }
+    $('#cursor-cell-icon').css({
+        'top': top - 13,
+        'left': left + 3,
+    });
 };
 
 mouse.set_color = function (color) {
-    $('#cursor-cell-icon').css('background', '#{}'.format(color));
+    mouse.color = '#{}'.format(color);
+    $('#cursor-cell-icon').css('background', mouse.color);
 };
 
 mouse.show = function () {
@@ -52,4 +53,18 @@ mouse.show = function () {
 
 mouse.hide = function () {
     $('#cursor-cell-icon').addClass('hidden');
+};
+
+mouse.enter_block = function (e) {
+    if (mouse.state == MOUSE_HOLD_CELL) {
+        $(this).addClass('cell cell-shadow');
+        $(this).css('background', mouse.color);
+    }
+};
+
+mouse.leave_block = function (e) {
+    if (mouse.state == MOUSE_HOLD_CELL) {
+        $(this).removeClass('cell cell-shadow');
+        $(this).removeAttr('style');
+    }
 };

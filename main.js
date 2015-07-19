@@ -18,8 +18,8 @@ $(function () {
     inventory.add(cg, 1);
 
     $(document).mousemove(function (e) {
-        if (mouse.state == MOUSE_SELECT_INVENTORY) {
-            mouse.mousemove(e.pageY, e.pageX);
+        if (mouse.state == MOUSE_HOLD_CELL) {
+            mouse.mousemove(e.clientY, e.clientX);
         }
     });
 

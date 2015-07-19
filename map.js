@@ -16,6 +16,11 @@ map.init = function () {
         s += '</div>';
     }
     $('#petridish').append(s);
+    for (var i = 0; i < map.HEIGHT; i++) {
+        for (var j = 0; j < map.WIDTH; j++) {
+            $('#cell-{}-{}'.format(i, j)).mouseenter(mouse.enter_block).mouseleave(mouse.leave_block);
+        }
+    }
 
     petridish = [];
     for (var i = 0; i < map.HEIGHT; i++) {
