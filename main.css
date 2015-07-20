@@ -87,20 +87,20 @@ html, body {
     background: #171717;
 }
 
-.inventory-cell-item {
+.panel-item {
     margin: 5px 5px;
     padding: 5px 20px;
 }
 
-.inventory-cell-item-selected {
+.panel-item-selected {
     background: #555555;
 }
 
-.inventory-cell-item:hover {
+.panel-item:hover {
     background: #444444;
 }
 
-.inventory-cell-item-selected:hover {
+.panel-item-selected:hover {
     background: #555555;
 }
 
@@ -108,7 +108,6 @@ html, body {
     display: inline-block;
     font-size: 17px;
     line-height: 20px;
-    vertical-align: top;
     margin-left: 10px;
     color: lightgray;
 }
@@ -128,3 +127,14 @@ html, body {
     position: fixed;
 }
 
+.tool-icon {
+    display: inline-block;
+}
+
+.tool-name {
+    display: inline-block;
+    font-size: 17px;
+    line-height: 20px;
+    margin-left: 10px;
+    color: lightgray;
+}

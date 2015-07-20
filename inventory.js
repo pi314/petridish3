@@ -9,7 +9,7 @@ inventory.add = function (cg, amount) {
 
     if (inventory[cell_gene] == undefined) {
         inventory[cell_gene] = 0;
-        var d = $('<div id="{}"class="inventory-cell-item">'.format(cell_gene));
+        var d = $('<div id="{}" class="panel-item">'.format(cell_gene));
         var c = $('<div class="block cell">');
         var n = $('<div class="cell-amount">');
         d.append(c);

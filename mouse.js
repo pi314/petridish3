@@ -11,7 +11,7 @@ mouse.select_inventory = function (e, cell_gene) {
     switch (mouse.state) {
     case MOUSE_FREE:
         mouse.selected_cell_gene = cell_gene;
-        $('#{}'.format(mouse.selected_cell_gene)).addClass('inventory-cell-item-selected');
+        $('#{}'.format(mouse.selected_cell_gene)).addClass('panel-item-selected');
         mouse.state = MOUSE_HOLD_CELL;
         mouse.mousemove(e.pageY, e.pageX);
         mouse.set_color(mouse.selected_cell_gene.substr(0, 6));
@@ -20,13 +20,13 @@ mouse.select_inventory = function (e, cell_gene) {
 
     case MOUSE_HOLD_CELL:
         if (mouse.selected_cell_gene == cell_gene) {
-            $('#{}'.format(mouse.selected_cell_gene)).removeClass('inventory-cell-item-selected');
+            $('#{}'.format(mouse.selected_cell_gene)).removeClass('panel-item-selected');
             mouse.state = MOUSE_FREE;
             mouse.hide();
         } else {
-            $('#{}'.format(mouse.selected_cell_gene)).removeClass('inventory-cell-item-selected');
+            $('#{}'.format(mouse.selected_cell_gene)).removeClass('panel-item-selected');
             mouse.selected_cell_gene = cell_gene;
-            $('#{}'.format(mouse.selected_cell_gene)).addClass('inventory-cell-item-selected');
+            $('#{}'.format(mouse.selected_cell_gene)).addClass('panel-item-selected');
             mouse.set_color(mouse.selected_cell_gene.substr(0, 6));
         }
         break;
@@ -91,7 +91,7 @@ mouse.click_block = function (e) {
             mouse.state = MOUSE_FREE;
 
             inventory.sub(mouse.selected_cell_gene);
-            $('#{}'.format(mouse.selected_cell_gene)).removeClass('inventory-cell-item-selected');
+            $('#{}'.format(mouse.selected_cell_gene)).removeClass('panel-item-selected');
         }
         break;
     case MOUSE_FREE:
