@@ -47,6 +47,25 @@ map.put_cell = function (c, v, col) {
     }
 };
 
+map.destroy_cell = function (v, col) {
+    if (v instanceof Number && col instanceof Number) {
+        v = new vector(v, col);
+    } else if (v instanceof cell && col == undefined) {
+        v = new vector(v.row, v.col);
+    } else {
+        return;
+    }
+    if (0 <= v.row && v.row < map.HEIGHT && 0 <= v.col && v.col < map.WIDTH) {
+        petridish[v.row][v.col] = EMPTY;
+        var target_dom = $('#cell-{}-{}'.format(v.row, v.col))
+        target_dom.removeAttr('style');
+        target_dom.removeClass('pulse-block');
+        target_dom.removeClass('cell');
+        target_dom.addClass('empty');
+        target_dom.addClass('block');
+    }
+};
+
 map.get_coordinate = function (c) {
     if (c.dom == null) { return null; }
     var res = /^cell-(\d+)-(\d+)$/.exec(c.dom.attr('id'));

@@ -78,17 +78,27 @@ mouse.leave_block = function (e) {
 
 mouse.click_block = function (e) {
     var coord = parse_id($(this).attr('id'));
-    if (mouse.state == MOUSE_HOLD_CELL && map.get_cell_at(coord) == EMPTY) {
-        $(this).removeClass('cell-shadow');
-        $(this).removeAttr('style');
-        var cg = new cell_group(mouse.selected_cell_gene);
-        cg.put_cell(coord);
-        cg.set_center(coord);
+    switch (mouse.state) {
+    case MOUSE_HOLD_CELL:
+        if (map.get_cell_at(coord) == EMPTY) {
+            $(this).removeClass('cell-shadow');
+            $(this).removeAttr('style');
+            var cg = new cell_group(mouse.selected_cell_gene);
+            cg.put_cell(coord);
+            cg.set_center(coord);
 
-        mouse.hide();
-        mouse.state = MOUSE_FREE;
+            mouse.hide();
+            mouse.state = MOUSE_FREE;
 
-        inventory.sub(mouse.selected_cell_gene);
-        $('#{}'.format(mouse.selected_cell_gene)).removeClass('inventory-cell-item-selected');
+            inventory.sub(mouse.selected_cell_gene);
+            $('#{}'.format(mouse.selected_cell_gene)).removeClass('inventory-cell-item-selected');
+        }
+        break;
+    case MOUSE_FREE:
+        var clicked_cell = map.get_cell_at(coord);
+        if (clicked_cell != EMPTY) {
+            clicked_cell.group.harvest(coord);
+        }
+        break;
     }
 };

@@ -11,6 +11,10 @@ SHAPE_VECTOR = {};
 SHAPE_VECTOR[DIAMAND] = [U, L, R, D];
 SHAPE_VECTOR[SQUARE] = [U, L, R, D, UL, UR, DL, DR];
 
+STATE_PETRIDISH = 0;
+STATE_HARVEST = 1;
+STATE_VANISH = 2;
+
 function cell_group (gene) {
     // cell gene related attributes
     if (gene == undefined) {
@@ -45,6 +49,8 @@ function cell_group (gene) {
     this.grow_flag = false;
     this.growth_counter = 0;
     this.grow_distance = null;
+
+    this.state = STATE_PETRIDISH;
 }
 
 cell_group.prototype.gene = function (new_gene) {
@@ -97,6 +103,7 @@ cell_group.prototype.set_distance = function (c, new_dist) {
 };
 
 cell_group.prototype.generate_pulse = function () {
+    if (this.state != STATE_PETRIDISH) { return; }
     if (this.row == null || this.col == null) { return; }
     var t = this;
 
@@ -121,6 +128,7 @@ cell_group.prototype.generate_pulse = function () {
 
 cell_group.prototype.wave_up = function (wave_distance) {
     var t = this;
+    if (t.state != STATE_PETRIDISH) { return; }
     if (wave_distance == undefined) {
         wave_distance = 0;
     }
@@ -180,6 +188,7 @@ cell_group.prototype.wave_up = function (wave_distance) {
 };
 
 cell_group.prototype.wave_down = function (wave_distance) {
+    if (this.state != STATE_PETRIDISH) { return; }
     for (var i in this.member[wave_distance]) {
         this.member[wave_distance][i].dom.removeClass('pulse-block').addClass('block');
     }
@@ -196,4 +205,62 @@ cell_group.prototype.copy = function () {
     c.growth_delay = this.growth_delay;
     c.allow_neighbors = this.allow_neighbors;
     return c;
+};
+
+cell_group.prototype.harvest = function (coord) {
+    var t = this;
+    if (t.state == STATE_HARVEST) { return; }
+    t.row = coord.row;
+    t.col = coord.col;
+    t.state = STATE_HARVEST;
+    t.grow_flag = false;
+    t.shake(true);
+
+    var farest_distance = 0;
+    for (var distance in t.member) {
+        for (var c in t.member[distance]) {
+            var this_cell = t.member[distance][c];
+            var new_dist = Math.abs(this_cell.row - t.row) + Math.abs(this_cell.col - t.col);
+            if (this_cell.position_ok == undefined || this_cell.distance != new_dist) {
+                this_cell.set_distance(new_dist);
+                farest_distance = Math.max(farest_distance, new_dist);
+            }
+            this_cell.position_ok = true;
+        }
+    }
+
+    setTimeout(function () {
+        t.harvest_round(farest_distance);
+    }, t.pulse_delay * PULSE_DELAY_UNIT);
+};
+
+cell_group.prototype.harvest_round = function (distance) {
+    var t = this;
+    if (distance < 0) { return; }
+    inventory.add(t, Object.keys(t.member[distance]).length);
+    for (var c in t.member[distance]) {
+        map.destroy_cell(t.member[distance][c]);
+    }
+    delete t.member[distance];
+    setTimeout(function () {
+        t.harvest_round(distance - 1);
+    }, t.pulse_delay * PULSE_DELAY_UNIT);
+};
+
+cell_group.prototype.shake = function (odd) {
+    var t = this;
+    if (t.state != STATE_HARVEST) { return; }
+    for(var wave_distance in t.member) {
+        for (var i in t.member[wave_distance]) {
+            var this_cell = t.member[wave_distance][i];
+            if (((this_cell.row + this_cell.col) % 2 == 0) == odd) {
+                this_cell.dom.removeClass('pulse-block').addClass('block');
+            } else {
+                this_cell.dom.removeClass('block').addClass('pulse-block');
+            }
+        }
+    }
+    setTimeout(function () {
+        t.shake(!odd);
+    }, t.pulse_delay * PULSE_DELAY_UNIT);
 };
