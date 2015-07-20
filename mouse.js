@@ -138,7 +138,6 @@ mouse.click_block = function (e) {
         var clicked_cell = map.get_cell_at(coord);
         if (clicked_cell != EMPTY) {
             clicked_cell.group.harvest(coord);
-            mouse.set_state(MOUSE_FREE);
         }
         break;
 
