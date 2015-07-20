@@ -68,6 +68,7 @@ mouse.enter_block = function (e) {
 mouse.leave_block = function (e) {
     if (mouse.state == MOUSE_HOLD_CELL) {
         var coord = parse_id($(this).attr('id'));
+        $(this).removeClass('cell-shadow');
         if (map.get_cell_at(coord) == EMPTY) {
             $(this).removeClass('cell cell-shadow');
             $(this).removeAttr('style');
@@ -76,8 +77,8 @@ mouse.leave_block = function (e) {
 };
 
 mouse.click_block = function (e) {
-    if (mouse.state == MOUSE_HOLD_CELL) {
-        var coord = parse_id($(this).attr('id'));
+    var coord = parse_id($(this).attr('id'));
+    if (mouse.state == MOUSE_HOLD_CELL && map.get_cell_at(coord) == EMPTY) {
         $(this).removeClass('cell-shadow');
         $(this).removeAttr('style');
         var cg = new cell_group(mouse.selected_cell_gene);
