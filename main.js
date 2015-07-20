@@ -33,9 +33,9 @@ $(function () {
     inventory.add(cg, 3);
 
     $(document).mousemove(function (e) {
-        if (mouse.state == MOUSE_HOLD_CELL) {
-            mouse.mousemove(e.clientY, e.clientX);
-        }
+        mouse.mousemove(e.clientY, e.clientX);
     });
+
+    $('#tool-pipette').click(mouse.take_pipette);
 
 });
