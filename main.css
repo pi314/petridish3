@@ -18,43 +18,6 @@ html, body {
     background: #111111;
 }
 
-#control-panel {
-    display: inline-block;
-    width: 200px;
-    height: 100%;
-    background: #222222;
-}
-
-#logo-wrapper {
-    margin: 15px auto;
-    width: 170px;
-    height: 100px;
-}
-
-.panel-block {
-    margin: 15px auto;
-    padding: 5px;
-    width: 160px;
-    background: #333333;
-}
-
-.panel-block > .title {
-    color: lightgray;
-    font-size: 20px;
-    text-align: center;
-    cursor: default;
-}
-
-.panel-block > hr {
-    border-color: lightgray;
-    margin-top: 5px;
-    margin-bottom: 10px;
-}
-
-.panel-block > .content {
-    min-height: 20px;
-}
-
 #petridish {
     display: inline-block;
     width: 596px;
@@ -88,32 +51,6 @@ html, body {
     background: #171717;
 }
 
-.panel-item {
-    margin: 5px 5px;
-    padding: 5px 20px;
-    cursor: pointer;
-}
-
-.panel-item-selected {
-    background: #555555;
-}
-
-.panel-item:hover {
-    background: #444444;
-}
-
-.panel-item-selected:hover {
-    background: #555555;
-}
-
-.cell-amount {
-    display: inline-block;
-    font-size: 17px;
-    line-height: 20px;
-    margin-left: 10px;
-    color: lightgray;
-}
-
 .hidden {
     display: none;
 }
@@ -127,18 +64,6 @@ html, body {
     width: 10px;
     height: 10px;
     position: fixed;
-}
-
-.tool-icon {
-    display: inline-block;
-}
-
-.tool-name {
-    display: inline-block;
-    font-size: 17px;
-    line-height: 20px;
-    margin-left: 10px;
-    color: lightgray;
 }
 
 #cursor-tool-icon {
