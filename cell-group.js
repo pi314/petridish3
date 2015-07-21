@@ -109,7 +109,7 @@ cell_group.prototype.generate_pulse = function () {
 
     if (t.growth_counter >= t.growth_delay) {
         t.grow_flag = true;
-        t.grow_distance = parseInt(sample(
+        t.grow_distance = parseInt(choice(
             Object.keys(t.member).filter(
                 function (x) { return x != 'Infinity'}
             )
@@ -172,7 +172,7 @@ cell_group.prototype.wave_up = function (wave_distance) {
 
     if (t.grow_flag && wave_distance == t.grow_distance) {
         // we need to grow a new cell, check available place to put
-        var neighbor_coord = sample(available_space)
+        var neighbor_coord = choice(available_space)
         if (neighbor_coord != undefined) {
             t.put_cell(neighbor_coord);
             t.grow_flag = false;

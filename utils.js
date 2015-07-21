@@ -39,7 +39,7 @@ function to_hex (d, padding) {
     return h;
 }
 
-function sample (sample_space) {
+function choice (sample_space) {
     return sample_space[Math.floor(Math.random() * sample_space.length)];
 }
 
