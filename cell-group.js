@@ -108,12 +108,14 @@ cell_group.prototype.generate_pulse = function () {
     var t = this;
 
     if (t.growth_counter >= t.growth_delay) {
-        t.grow_flag = true;
-        t.grow_distance = parseInt(choice(
-            Object.keys(t.member).filter(
-                function (x) { return x != 'Infinity'}
-            )
-        ));
+        if (!t.grow_flag) {
+            t.grow_flag = true;
+            t.grow_distance = int(choice(
+                Object.keys(t.member).filter(
+                    function (x) { return x != 'Infinity'}
+                )
+            ));
+        }
         t.growth_counter = 0;
     }
 
