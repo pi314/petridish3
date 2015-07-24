@@ -20,8 +20,10 @@ map.init = function () {
         for (var j = 0; j < map.WIDTH; j++) {
             $('#cell-{}-{}'.format(i, j))
                 .mouseenter(mouse.enter_block)
-                .mouseleave(mouse.leave_block)
-                .click(mouse.click_block);
+                .click(function () {
+                    mouse.click_block($(this));
+                    return false;
+                });
         }
     }
 
@@ -43,7 +45,9 @@ map.put_cell = function (c, v, col) {
         petridish[v.row][v.col] = c;
         c.row = v.row;
         c.col = v.col;
-        c.bind_dom($('#cell-{}-{}'.format(v.row, v.col)));
+        var target_dom = $('#cell-{}-{}'.format(v.row, v.col));
+        c.bind_dom(target_dom);
+        unfocus_block(target_dom);
     }
 };
 

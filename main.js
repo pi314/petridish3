@@ -33,6 +33,10 @@ $(function () {
         mouse.mousemove(e.clientY, e.clientX);
     });
 
+    $('#petridish')
+        .mouseleave(mouse.leave_petridish)
+        .click(mouse.click_petridish);
+
     $('#tool-pipette').click(mouse.take_pipette);
 
 });

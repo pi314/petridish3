@@ -7,6 +7,7 @@ var mouse = {};
 mouse.state = MOUSE_FREE;
 mouse.selected_cell_gene = null;
 mouse.color = null;
+mouse.last_entered_block = [];
 
 mouse.set_state = function (new_state, data) {
     switch (mouse.state) {
@@ -98,39 +99,50 @@ mouse.set_color = function (color) {
     $('#cursor-cell-icon').css('background', mouse.color);
 };
 
-mouse.enter_block = function (e) {
+function unfocus_block (last_block) {
+    var coord = parse_id(last_block.attr('id'));
+    last_block.removeClass('cell-shadow');
+    if (map.get_cell_at(coord) == EMPTY) {
+        last_block.removeClass('cell cell-shadow');
+        last_block.removeAttr('style');
+    }
+}
+
+mouse.enter_block = function () {
     if (mouse.state == MOUSE_HOLD_CELL) {
+        while (mouse.last_entered_block.length > 0) {
+            unfocus_block(mouse.last_entered_block.shift())
+        }
+
         var coord = parse_id($(this).attr('id'));
         if (map.get_cell_at(coord) == EMPTY) {
             $(this).addClass('cell cell-shadow');
             $(this).css('background', mouse.color);
         }
     }
+
+    mouse.last_entered_block.push($(this));
+
 };
 
-mouse.leave_block = function (e) {
-    if (mouse.state == MOUSE_HOLD_CELL) {
-        var coord = parse_id($(this).attr('id'));
-        $(this).removeClass('cell-shadow');
-        if (map.get_cell_at(coord) == EMPTY) {
-            $(this).removeClass('cell cell-shadow');
-            $(this).removeAttr('style');
-        }
-    }
-};
-
-mouse.click_block = function (e) {
-    var coord = parse_id($(this).attr('id'));
+mouse.click_block = function (clicked_block) {
+    var coord = parse_id(clicked_block.attr('id'));
     switch (mouse.state) {
     case MOUSE_HOLD_CELL:
         if (map.get_cell_at(coord) == EMPTY) {
-            $(this).removeClass('cell-shadow');
-            $(this).removeAttr('style');
+            clicked_block.removeClass('cell-shadow');
+            clicked_block.removeAttr('style');
             var cg = new cell_group(mouse.selected_cell_gene);
             cg.put_cell(coord);
             cg.set_center(coord);
             inventory.sub(mouse.selected_cell_gene);
+            if (inventory[mouse.selected_cell_gene] == 0) {
+                mouse.set_state(MOUSE_FREE);
+            }
+
+        } else {
             mouse.set_state(MOUSE_FREE);
+
         }
         break;
 
@@ -142,6 +154,19 @@ mouse.click_block = function (e) {
         break;
 
     }
+};
+
+mouse.leave_petridish = function () {
+    while (mouse.last_entered_block.length > 0) {
+        unfocus_block(mouse.last_entered_block.shift())
+    }
+};
+
+mouse.click_petridish = function () {
+    while (mouse.last_entered_block.length > 1) {
+        unfocus_block(mouse.last_entered_block.shift())
+    }
+    mouse.click_block(mouse.last_entered_block.shift());
 };
 
 mouse.take_pipette = function (e) {
