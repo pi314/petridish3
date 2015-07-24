@@ -8,26 +8,26 @@ $(function () {
     cg.allow_neighbors = 255;
     cg.color = COLORS[0];
     inventory.add(cg, 3);
-    // cg.color = COLORS[1];
-    // inventory.add(cg, 3);
+    cg.color = COLORS[1];
+    inventory.add(cg, 0);
     cg.color = COLORS[2];
     inventory.add(cg, 3);
-    // cg.color = COLORS[3];
-    // inventory.add(cg, 3);
+    cg.color = COLORS[3];
+    inventory.add(cg, 0);
     cg.color = COLORS[4];
     inventory.add(cg, 3);
-    // cg.color = COLORS[5];
-    // inventory.add(cg, 3);
+    cg.color = COLORS[5];
+    inventory.add(cg, 0);
     cg.color = COLORS[6];
     inventory.add(cg, 3);
     cg.color = COLORS[7];
     inventory.add(cg, 3);
     cg.color = COLORS[8];
     inventory.add(cg, 3);
-    // cg.color = COLORS[9];
-    // inventory.add(cg, 3);
-    // cg.color = COLORS[10];
-    // inventory.add(cg, 3);
+    cg.color = COLORS[9];
+    inventory.add(cg, 0);
+    cg.color = COLORS[10];
+    inventory.add(cg, 0);
 
     $(document).mousemove(function (e) {
         mouse.mousemove(e.clientY, e.clientX);
