@@ -54,3 +54,29 @@ String.prototype.format = function () {
 String.prototype.slice = String.prototype.substring;
 
 int = parseInt;
+
+function rgb (index, r, g, b) {
+    this.index = index;
+    this.r = r;
+    this.g = g;
+    this.b = b;
+    this.hex = hex(this.r, 2) + hex(this.g, 2) + hex(this.b, 2);
+}
+
+COLORS = [
+    new rgb(0,  200, 80,  80),
+    new rgb(1,  255, 150, 0),
+    new rgb(2,  255, 230, 0),
+    new rgb(3,  180, 255, 0),
+    new rgb(4,  0,   255, 0),
+    new rgb(5,  0,   255, 180),
+    new rgb(6,  0,   255, 255),
+    new rgb(7,  0,   128, 255),
+    new rgb(8,  128, 0,   255),
+    new rgb(9,  255, 0,   255),
+    new rgb(10, 235, 235, 235),
+];
+
+for (var i = 0; i < COLORS.length; i++) {
+    COLORS[COLORS[i].hex] = COLORS[i];
+}

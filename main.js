@@ -1,48 +1,33 @@
 $(function () {
     map.init();
-
-//rgb(255,100,100)
-//rgb(255,150,0)
-//rgb(255,230,0)
-//rgb(255,255,0)
-//rgb(180,255,0)
-//rgb(0,255,0)
-//rgb(0,255,180)
-//rgb(0,255,255)
-//rgb(0,128,255)
-//rgb(128,0,255)
-//rgb(255,0,255)
-
     var cg = new cell_group();
-    cg.R = 0;
-    cg.G = 255;
-    cg.B = 0;
     cg.shape = DIAMAND;
     cg.pulse_interval = 30;
     cg.pulse_delay = 10;
     cg.growth_delay = 2;
     cg.allow_neighbors = 255;
+    cg.color = COLORS[0];
     inventory.add(cg, 3);
-    cg.R = 0;
-    cg.G = 255;
-    cg.B = 255;
+    // cg.color = COLORS[1];
+    // inventory.add(cg, 3);
+    cg.color = COLORS[2];
     inventory.add(cg, 3);
-    cg.R = 255;
-    cg.G = 100;
-    cg.B = 100;
+    // cg.color = COLORS[3];
+    // inventory.add(cg, 3);
+    cg.color = COLORS[4];
     inventory.add(cg, 3);
-    cg.R = 255;
-    cg.G = 0;
-    cg.B = 255;
+    // cg.color = COLORS[5];
+    // inventory.add(cg, 3);
+    cg.color = COLORS[6];
     inventory.add(cg, 3);
-    cg.R = 255;
-    cg.G = 255;
-    cg.B = 0;
+    cg.color = COLORS[7];
     inventory.add(cg, 3);
-    cg.R = 0;
-    cg.G = 0;
-    cg.B = 255;
+    cg.color = COLORS[8];
     inventory.add(cg, 3);
+    // cg.color = COLORS[9];
+    // inventory.add(cg, 3);
+    // cg.color = COLORS[10];
+    // inventory.add(cg, 3);
 
     $(document).mousemove(function (e) {
         mouse.mousemove(e.clientY, e.clientX);

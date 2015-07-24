@@ -22,7 +22,7 @@ inventory.add = function (cg, amount) {
         $('#{}'.format(cell_gene)).removeClass('hidden');
     }
     inventory[cell_gene] += amount;
-    $('#{} > .cell'.format(cell_gene)).css('background', 'rgb({}, {}, {})'.format(cg.R, cg.G, cg.B));
+    $('#{} > .cell'.format(cell_gene)).css('background', '#{}'.format(cg.color.hex));
     $('#{} > .cell-amount'.format(cell_gene)).text(inventory[cell_gene]);
 };
 

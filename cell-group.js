@@ -19,18 +19,14 @@ function cell_group (gene) {
     // cell gene related attributes
     if (gene == undefined) {
         // default null values
-        this.R = null;
-        this.G = null;
-        this.B = null;
+        this.color = null;
         this.shape = null;
         this.pulse_interval = null;     // unit: 50ms
         this.pulse_delay = null;        // unit: 10ms
         this.growth_delay = null;       // unit: 500ms
         this.allow_neighbors = null;
     } else {
-        this.R = int(gene.slice(0, 2), 16);
-        this.G = int(gene.slice(2, 4), 16);
-        this.B = int(gene.slice(4, 6), 16);
+        this.color = COLORS[gene.slice(0, 6)];
         this.shape = int(gene[6]);
         this.pulse_interval = int(gene.slice(7, 9), 16);
         this.pulse_delay = int(gene.slice(9, 10), 16);
@@ -53,12 +49,10 @@ function cell_group (gene) {
     this.state = STATE_PETRIDISH;
 }
 
-cell_group.prototype.gene = function (new_gene) {
+cell_group.prototype.gene = function () {
     // get the cell's gene
     var ret = '';
-    ret += hex(this.R, 2);
-    ret += hex(this.G, 2);
-    ret += hex(this.B, 2);
+    ret += this.color.hex;
     ret += {0: '0', 1: '1', null: 'Z'}[this.shape];
     ret += hex(this.pulse_interval, 2);
     ret += hex(this.pulse_delay, 1);
@@ -198,9 +192,7 @@ cell_group.prototype.wave_down = function (wave_distance) {
 
 cell_group.prototype.copy = function () {
     var c = new cell_group();
-    c.R = this.R;
-    c.G = this.G;
-    c.B = this.B;
+    c.color = this.color;
     c.shape = this.shape;
     c.pulse_interval = this.pulse_interval;
     c.pulse_delay = this.pulse_delay;
