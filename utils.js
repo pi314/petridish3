@@ -31,7 +31,7 @@ DL.reverse = UR;
 UR.reverse = DL;
 O.reverse = O;
 
-function to_hex (d, padding) {
+function hex (d, padding) {
     var h = d.toString(16);
     while (h.length < padding) {
         h = '0'+ h;

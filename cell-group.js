@@ -56,14 +56,14 @@ function cell_group (gene) {
 cell_group.prototype.gene = function (new_gene) {
     // get the cell's gene
     var ret = '';
-    ret += to_hex(this.R, 2);
-    ret += to_hex(this.G, 2);
-    ret += to_hex(this.B, 2);
+    ret += hex(this.R, 2);
+    ret += hex(this.G, 2);
+    ret += hex(this.B, 2);
     ret += {0: '0', 1: '1', null: 'Z'}[this.shape];
-    ret += to_hex(this.pulse_interval, 2);
-    ret += to_hex(this.pulse_delay, 1);
-    ret += to_hex(this.growth_delay, 2);
-    ret += to_hex(this.allow_neighbors, 2);
+    ret += hex(this.pulse_interval, 2);
+    ret += hex(this.pulse_delay, 1);
+    ret += hex(this.growth_delay, 2);
+    ret += hex(this.allow_neighbors, 2);
     return ret;
 };
 
