@@ -26,12 +26,12 @@ function cell_group (gene) {
         this.growth_delay = null;       // unit: 500ms
         this.allow_neighbors = null;
     } else {
-        this.color = COLORS[gene.slice(0, 6)];
-        this.shape = int(gene[6]);
-        this.pulse_interval = int(gene.slice(7, 9), 16);
-        this.pulse_delay = int(gene.slice(9, 10), 16);
-        this.growth_delay = int(gene.slice(10, 12), 16);
-        this.allow_neighbors = int(gene.slice(12, 14), 16);
+        this.color = gene[0];
+        this.shape = int(gene[1]);
+        this.pulse_interval = int(gene.slice(2, 4), 16);
+        this.pulse_delay = int(gene.slice(4, 5), 16);
+        this.growth_delay = int(gene.slice(5, 7), 16);
+        this.allow_neighbors = int(gene.slice(7, 9), 16);
     }
 
     // center coordinate
@@ -52,7 +52,7 @@ function cell_group (gene) {
 cell_group.prototype.gene = function () {
     // get the cell's gene
     var ret = '';
-    ret += this.color.hex;
+    ret += hex(this.color, 1);
     ret += {0: '0', 1: '1', null: 'Z'}[this.shape];
     ret += hex(this.pulse_interval, 2);
     ret += hex(this.pulse_delay, 1);
