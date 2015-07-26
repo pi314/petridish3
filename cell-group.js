@@ -1,9 +1,6 @@
 PULSE_INTERVAL_UNIT = 50;
 PULSE_DELAY_UNIT = 10;
 
-MSG_WAVE = 0;
-MSG_GROW = 1;
-
 DIAMAND = 0;
 SQUARE = 1;
 
@@ -13,7 +10,6 @@ SHAPE_VECTOR[SQUARE] = [U, L, R, D, UL, UR, DL, DR];
 
 STATE_PETRIDISH = 0;
 STATE_HARVEST = 1;
-STATE_VANISH = 2;
 
 function cell_group (gene) {
     // cell gene related attributes
