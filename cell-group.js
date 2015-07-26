@@ -158,8 +158,7 @@ cell_group.prototype.wave_up = function (wave_distance) {
             } else if (neighbor_cell.group == this_cell.group) {
                 // neighbor cell is not empty, and we are in same group
                 // update its distance
-                if (neighbor_cell.distance == Infinity ||
-                        this_cell.distance + 1 < neighbor_cell.distance) {
+                if (this_cell.distance + 1 < neighbor_cell.distance) {
                     neighbor_cell.set_distance(this_cell.distance + 1);
                 }
             }
