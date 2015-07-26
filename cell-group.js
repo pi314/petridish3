@@ -88,6 +88,7 @@ cell_group.prototype.set_center = function (v, col) {
 };
 
 cell_group.prototype.set_distance = function (c, new_dist) {
+    if (c.distance == new_dist) { return; }
     delete this.member[c.distance][c.id];
     c.distance = new_dist;
     if (!(c.distance in this.member)) {
