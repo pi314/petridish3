@@ -104,7 +104,7 @@ cell_group.prototype.generate_pulse = function () {
             t.grow_flag = true;
             t.grow_distance = int(choice(
                 Object.keys(t.member).filter(
-                    function (x) { return x != 'Infinity'}
+                    function (x) { return x != 'Infinity'; }
                 )
             ));
         }
