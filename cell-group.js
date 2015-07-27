@@ -1,5 +1,6 @@
 PULSE_INTERVAL_UNIT = 50;
 PULSE_DELAY_UNIT = 10;
+GROWTH_UNIT = 500;
 
 DIAMAND = 0;
 SQUARE = 1;
@@ -98,7 +99,7 @@ cell_group.prototype.generate_pulse = function () {
     if (this.row == null || this.col == null) { return; }
     var t = this;
 
-    if (t.growth_counter >= t.growth_delay) {
+    if (t.growth_counter >= t.growth_delay * GROWTH_UNIT) {
         if (!t.grow_flag) {
             t.grow_flag = true;
             t.grow_distance = int(choice(
