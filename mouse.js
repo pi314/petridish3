@@ -95,7 +95,6 @@ mouse.mousemove = function (top, left, force) {
 };
 
 mouse.set_color = function (color) {
-    console.log(color);
     mouse.color = '#{}'.format(COLORS[color].hex);
     $('#cursor-cell-icon').css('background', mouse.color);
 };

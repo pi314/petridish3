@@ -264,6 +264,13 @@ cell_group.prototype.shake = function (odd) {
 
 cell_group.prototype.mutate = function () {
     var mutated_cg = this.copy();
-    mutated_cg.color = (mutated_cg.color + choice([1, -1]) + 11) % 11;
+    var r = Math.random() * 50;
+    if (r == 0) {
+        mutated_cg.color = 10;  // ranbow cell, not implemented yet
+    } else if (r < 10) {
+        mutated_cg.color = 10;
+    } else {
+        mutated_cg.color = (mutated_cg.color + choice([1, -1]) + 10) % 10;
+    }
     return mutated_cg;
 };
