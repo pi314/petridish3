@@ -167,7 +167,8 @@ cell_group.prototype.wave_up = function (wave_distance) {
         // we need to grow a new cell, check available place to put
         var neighbor_coord = choice(available_space)
         if (neighbor_coord != undefined) {
-            if (int(Math.random() * 100) == 0) {
+            // white cell doesn't mutate
+            if (t.color != 10 && int(Math.random() * 100) == 0) {
                 var mutated_cg = t.mutate();
                 mutated_cg.put_cell(neighbor_coord);
                 mutated_cg.set_center(neighbor_coord);
