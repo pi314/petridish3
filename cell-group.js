@@ -23,8 +23,8 @@ function cell_group (gene) {
         this.growth_delay = null;       // unit: 500ms
         this.allow_neighbors = null;
     } else {
-        this.color = gene[0];
-        this.shape = int(gene[1]);
+        this.color = int(gene[0], 16);
+        this.shape = int(gene[1], 16);
         this.pulse_interval = int(gene.slice(2, 4), 16);
         this.pulse_delay = int(gene.slice(4, 5), 16);
         this.growth_delay = int(gene.slice(5, 7), 16);
@@ -167,7 +167,13 @@ cell_group.prototype.wave_up = function (wave_distance) {
         // we need to grow a new cell, check available place to put
         var neighbor_coord = choice(available_space)
         if (neighbor_coord != undefined) {
-            t.put_cell(neighbor_coord);
+            if (int(Math.random() * 100) == 0) {
+                var mutated_cg = t.mutate();
+                mutated_cg.put_cell(neighbor_coord);
+                mutated_cg.set_center(neighbor_coord);
+            } else {
+                t.put_cell(neighbor_coord);
+            }
             t.grow_flag = false;
         } else {
             t.grow_distance += 1;
@@ -254,4 +260,10 @@ cell_group.prototype.shake = function (odd) {
     setTimeout(function () {
         t.shake(!odd);
     }, t.pulse_delay * PULSE_DELAY_UNIT);
+};
+
+cell_group.prototype.mutate = function () {
+    var mutated_cg = this.copy();
+    mutated_cg.color = (mutated_cg.color + choice([1, -1]) + 11) % 11;
+    return mutated_cg;
 };

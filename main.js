@@ -4,7 +4,8 @@ $(function () {
     cg.shape = DIAMAND;
     cg.pulse_interval = 30;
     cg.pulse_delay = 10;
-    cg.growth_delay = 40;
+    // cg.growth_delay = 40;
+    cg.growth_delay = 2;
     cg.allow_neighbors = 255;
     cg.color = 0;
     inventory.add(cg, 0);
@@ -15,7 +16,7 @@ $(function () {
     cg.color = 3;
     inventory.add(cg, 0);
     cg.color = 4;
-    inventory.add(cg, 1);
+    inventory.add(cg, 1);   // lime
     cg.color = 5;
     inventory.add(cg, 0);
     cg.color = 6;
