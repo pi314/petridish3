@@ -3,7 +3,7 @@ function cell (group) {
     this.col = null;
     this.id = null;
     this.group = group;
-    this.distance = Infinity;
+    this.timestamp = 0;
     this.dom = null;
 }
 
@@ -15,8 +15,23 @@ cell.prototype.bind_dom = function (dom) {
     this.id = dom.attr('id');
 };
 
-cell.prototype.set_distance = function (new_dist) {
-    this.group.set_distance(this, new_dist);
+cell.prototype.neighbors = function () {
+    var this_coord = new vector(this.row, this.col);
+    var ret = {
+        'empty': [],
+        'team': [],
+    };
+    for (var j in SHAPE_VECTOR[this.group.shape]) {
+        var neighbor_coord = this_coord.add(SHAPE_VECTOR[this.group.shape][j]);
+        var neighbor_cell = map.get_cell_at(neighbor_coord)
+
+        if (neighbor_cell == EMPTY) {
+            ret['empty'].push(neighbor_coord);
+        } else if (neighbor_cell.group == this.group) {
+            ret['team'].push(neighbor_cell);
+        }
+    }
+    return ret;
 };
 
 function parse_id (id) {

@@ -80,3 +80,8 @@ COLORS = [
 for (var i = 0; i < COLORS.length; i++) {
     COLORS[COLORS[i].hex] = COLORS[i];
 }
+
+function pair (f, s) {
+    this.first = f;
+    this.second = s;
+}
