@@ -9,8 +9,9 @@ SHAPE_VECTOR = {};
 SHAPE_VECTOR[DIAMAND] = [U, L, R, D];
 SHAPE_VECTOR[SQUARE] = [U, L, R, D, UL, UR, DL, DR];
 
-STATE_PETRIDISH = 0;
-STATE_HARVEST = 1;
+STATE_FREEZE = 0;
+STATE_PETRIDISH = 1;
+STATE_HARVEST = 2;
 
 function cell_group (gene) {
     // cell gene related attributes
@@ -45,7 +46,7 @@ function cell_group (gene) {
     // to identify different pulses
     this.pulse_counter = 1;
 
-    this.state = STATE_PETRIDISH;
+    this.state = STATE_FREEZE;
 }
 
 cell_group.prototype.gene = function () {
@@ -77,9 +78,12 @@ cell_group.prototype.set_center = function (v, col) {
     }
     t.row = v.row;
     t.col = v.col;
-    setTimeout(function () {
-        t.generate_pulse();
-    }, 0);
+    if (this.state == STATE_FREEZE) {
+        this.state = STATE_PETRIDISH;
+        setTimeout(function () {
+            t.generate_pulse();
+        }, 0);
+    }
 };
 
 cell_group.prototype.generate_pulse = function () {
