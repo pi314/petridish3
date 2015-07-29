@@ -111,7 +111,7 @@ cell_group.prototype.generate_pulse = function () {
         t.growth_counter = 0;
     }
 
-    t.wave_up();
+    t.pulse_up();
 
     // next pulse
     setTimeout(function () {
@@ -120,17 +120,17 @@ cell_group.prototype.generate_pulse = function () {
     }, t.pulse_interval * PULSE_INTERVAL_UNIT);
 };
 
-cell_group.prototype.wave_up = function (wave_distance) {
+cell_group.prototype.pulse_up = function (pulse_distance) {
     var t = this;
     if (t.state != STATE_PETRIDISH) { return; }
-    if (wave_distance == undefined) {
-        wave_distance = 0;
+    if (pulse_distance == undefined) {
+        pulse_distance = 0;
     }
 
-    if (!(wave_distance in this.member) ||
-            Object.keys(this.member[wave_distance]).length == 0) {
+    if (!(pulse_distance in this.member) ||
+            Object.keys(this.member[pulse_distance]).length == 0) {
         // no further cells, stop pulsing
-        if (t.grow_flag && wave_distance == t.grow_distance) {
+        if (t.grow_flag && pulse_distance == t.grow_distance) {
             // unfortunately we did not successfully grow new cell
             // find a new place from start
             t.grow_distance = 0;
@@ -139,8 +139,8 @@ cell_group.prototype.wave_up = function (wave_distance) {
     }
 
     var available_space = [];
-    for (var i in this.member[wave_distance]) {
-        var this_cell = t.member[wave_distance][i];
+    for (var i in this.member[pulse_distance]) {
+        var this_cell = t.member[pulse_distance][i];
         this_cell.dom.removeClass('block').addClass('pulse-block');
         var this_coord = new vector(this_cell.row, this_cell.col);
         // check surrounding cells (according to their pulse shape)
@@ -150,7 +150,7 @@ cell_group.prototype.wave_up = function (wave_distance) {
 
             if (neighbor_cell == EMPTY) {
                 // neighbor cell is empty, add it into check list
-                if (t.grow_flag && wave_distance == t.grow_distance) {
+                if (t.grow_flag && pulse_distance == t.grow_distance) {
                     available_space.push(neighbor_coord);
                 }
             } else if (neighbor_cell.group == this_cell.group) {
@@ -163,7 +163,7 @@ cell_group.prototype.wave_up = function (wave_distance) {
         }
     }
 
-    if (t.grow_flag && wave_distance == t.grow_distance) {
+    if (t.grow_flag && pulse_distance == t.grow_distance) {
         // we need to grow a new cell, check available place to put
         var neighbor_coord = choice(available_space)
         if (neighbor_coord != undefined) {
@@ -182,15 +182,15 @@ cell_group.prototype.wave_up = function (wave_distance) {
     }
 
     setTimeout(function () {
-        t.wave_down(wave_distance);
-        t.wave_up(wave_distance + 1);
+        t.pulse_down(pulse_distance);
+        t.pulse_up(pulse_distance + 1);
     }, t.pulse_delay * PULSE_DELAY_UNIT);
 };
 
-cell_group.prototype.wave_down = function (wave_distance) {
+cell_group.prototype.pulse_down = function (pulse_distance) {
     if (this.state != STATE_PETRIDISH) { return; }
-    for (var i in this.member[wave_distance]) {
-        this.member[wave_distance][i].dom.removeClass('pulse-block').addClass('block');
+    for (var i in this.member[pulse_distance]) {
+        this.member[pulse_distance][i].dom.removeClass('pulse-block').addClass('block');
     }
 };
 
@@ -248,9 +248,9 @@ cell_group.prototype.harvest_round = function (distance) {
 cell_group.prototype.shake = function (odd) {
     var t = this;
     if (t.state != STATE_HARVEST) { return; }
-    for(var wave_distance in t.member) {
-        for (var i in t.member[wave_distance]) {
-            var this_cell = t.member[wave_distance][i];
+    for(var pulse_distance in t.member) {
+        for (var i in t.member[pulse_distance]) {
+            var this_cell = t.member[pulse_distance][i];
             if (((this_cell.row + this_cell.col) % 2 == 0) == odd) {
                 this_cell.dom.removeClass('pulse-block').addClass('block');
             } else {
