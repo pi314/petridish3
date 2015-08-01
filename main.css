@@ -41,6 +41,13 @@ html, body {
     display: inline-block;
 }
 
+.message-block {
+    width: 22px;
+    height: 22px;
+    margin: 0;
+    display: inline-block;
+}
+
 .cell {
     border-radius: 3px;
     font-size: 18px;

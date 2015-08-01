@@ -12,6 +12,7 @@ SHAPE_VECTOR[SQUARE] = [U, L, R, D, UL, UR, DL, DR];
 STATE_FREEZE = 0;
 STATE_PETRIDISH = 1;
 STATE_HARVEST = 2;
+STATE_SURRENDER = 3;
 
 function cell_group (gene) {
     // cell gene related attributes
@@ -47,6 +48,7 @@ function cell_group (gene) {
     this.pulse_counter = 1;
 
     this.state = STATE_FREEZE;
+    this.move_center_counter = 0;
 }
 
 cell_group.prototype.gene = function () {
@@ -65,10 +67,16 @@ cell_group.prototype.put_cell = function (v, col) {
     if (!(v instanceof vector)) {
         v = new vector(v, col);
     }
-    var c = new cell(this);
-    map.put_cell(c, v);
+    var target_cell = map.get_cell_at(v);
+    if (target_cell == EMPTY) {
+        target_cell = new cell(this);
+    } else {
+        target_cell.group = this;
+        target_cell.timestamp = 0;
+    }
+    map.put_cell(target_cell, v);
     // the cell get its id AFTER the it is on the map
-    this.member[c.id] = c;
+    this.member[target_cell.id] = target_cell;
 };
 
 cell_group.prototype.set_center = function (v, col) {
@@ -84,6 +92,14 @@ cell_group.prototype.set_center = function (v, col) {
             t.generate_pulse();
         }, 0);
     }
+};
+
+cell_group.prototype.center_coord = function () {
+    return new vector(this.row, this.col);
+};
+
+cell_group.prototype.cell_amount = function () {
+    return Object.keys(this.member).length;
 };
 
 cell_group.prototype.generate_pulse = function () {
@@ -104,6 +120,7 @@ cell_group.prototype.generate_pulse = function () {
     pulse_data['receivers'][center_cell.id] = center_cell;
     pulse_data['timestamp'] = t.pulse_counter;
     pulse_data['distance'] = 0;
+    pulse_data['friends'] = {};
     t.pulse_up(pulse_data);
     t.pulse_counter += 1;
 
@@ -117,15 +134,22 @@ cell_group.prototype.generate_pulse = function () {
 cell_group.prototype.pulse_up = function (pulse_data) {
     var t = this;
     if (t.state != STATE_PETRIDISH) { return; }
+    if (Object.keys(pulse_data['receivers']).length == 0
+            && Object.keys(pulse_data['friends']).length == 0) {
+        console.log('end of pulse');
+        return;
+    }
 
     var grow_here = choice([true, true, false]);
     var available_space = [];
     var current_receivers = pulse_data['receivers'];
+    var current_friends = pulse_data['friends']
     var next_receivers = {};
     for (var i in current_receivers) {
-        var this_cell = pulse_data['receivers'][i];
+        var this_cell = current_receivers[i];
         this_cell.dom.removeClass('block').addClass('pulse-block');
         this_cell.timestamp = pulse_data['timestamp'];
+        this_cell.distance = pulse_data['distance'];
 
         // check surrounding cells (based on their pulse shape)
         var neighbors = this_cell.neighbors();
@@ -134,43 +158,84 @@ cell_group.prototype.pulse_up = function (pulse_data) {
                 available_space.push(neighbors['empty'][j]);
             }
         }
+
         for (var j in neighbors['team']) {
             if (neighbors['team'][j].timestamp < pulse_data['timestamp']) {
                 next_receivers[neighbors['team'][j].id] = neighbors['team'][j];
             }
         }
+
+        // same gene but different group, detecting their center
+        for (var j in neighbors['friends']) {
+            current_friends[neighbors['friends'][j].id] = neighbors['friends'][j];
+        }
+    }
+
+    var next_friends = {};
+    for (var i in current_friends) {
+        var this_cell = current_friends[i];
+        this_cell.dom.addClass('message-block');
+
+        var neighbors = this_cell.neighbors();
+        for (var j in neighbors['team']) {
+            if (neighbors['team'][j].distance < this_cell.distance) {
+                next_friends[neighbors['team'][j].id] = neighbors['team'][j];
+            }
+        }
+    }
+
+    // detecting friend group's center
+    var next_friends_index = Object.keys(next_friends);
+    if (next_friends_index.length == 1) {
+        var last_one_friend = next_friends[next_friends_index[0]];
+        if (last_one_friend.is_center()) {
+            // got their center
+            var friend_group = last_one_friend.group;
+            if (friend_group.cell_amount() > t.cell_amount()) {
+                // they are more than my group, merge into them
+                if (randrange(20) == 0) {
+                    t.state = STATE_SURRENDER;
+                    for (var i in t.member) {
+                        friend_group.put_cell(t.member[i].coord());
+                        delete t.member[i];
+                    }
+                }
+            }
+        }
     }
 
     // we need to grow a new cell, check available place to put
-    if (t.grow_flag && grow_here) {
-        if (available_space.length > 0) {
-            // we got a place to put cell
-            var neighbor_coord = choice(available_space)
-            // check if we need to create a new mutated cell group
-            // but white cell doesn't mutate
-            if (t.color != 10 && int(Math.random() * 100) == 0) {
-                var mutated_cg = t.mutate();
-                mutated_cg.put_cell(neighbor_coord);
-                mutated_cg.set_center(neighbor_coord);
-            } else {
-                t.put_cell(neighbor_coord);
-                var next_cell = map.get_cell_at(neighbor_coord);
-                next_receivers[next_cell.id] = next_cell;
-            }
-            t.grow_flag = false;
+    if (t.grow_flag && grow_here && available_space.length > 0) {
+        // we got a place to put cell
+        var neighbor_coord = choice(available_space)
+        // check if we need to create a new mutated cell group
+        // but white cell doesn't mutate
+        if (t.color != 10 && randrange(100) == 0) {
+            var mutated_cg = t.mutate();
+            mutated_cg.put_cell(neighbor_coord);
+            mutated_cg.set_center(neighbor_coord);
+        } else {
+            t.put_cell(neighbor_coord);
+            var next_cell = map.get_cell_at(neighbor_coord);
+            next_receivers[next_cell.id] = next_cell;
         }
+        t.grow_flag = false;
     }
 
     pulse_data['distance'] += 1;
     pulse_data['receivers'] = next_receivers;
+    pulse_data['friends'] = next_friends;
     setTimeout(function () {
+        for (var i in current_friends) {
+            current_friends[i].dom.removeClass('message-block');
+        }
         t.pulse_down(current_receivers);
         t.pulse_up(pulse_data);
     }, t.pulse_delay * PULSE_DELAY_UNIT);
 };
 
 cell_group.prototype.pulse_down = function (current_receivers) {
-    if (this.state != STATE_PETRIDISH) { return; }
+    if (this.state != STATE_PETRIDISH && this.state != STATE_SURRENDER) { return; }
     for (var i in current_receivers) {
         current_receivers[i].dom.removeClass('pulse-block').addClass('block');
     }
@@ -261,7 +326,7 @@ cell_group.prototype.shake = function (odd) {
 
 cell_group.prototype.mutate = function () {
     var mutated_cg = this.copy();
-    var r = Math.random() * 50;
+    var r = randrange(50);
     if (r == 0) {
         mutated_cg.color = 10;  // ranbow cell, not implemented yet
     } else if (r < 10) {

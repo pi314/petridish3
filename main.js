@@ -4,8 +4,7 @@ $(function () {
     cg.shape = DIAMAND;
     cg.pulse_interval = 30;
     cg.pulse_delay = 10;
-    // cg.growth_delay = 40;
-    cg.growth_delay = 2;
+    cg.growth_delay = 40;
     cg.allow_neighbors = 255;
     cg.color = 0;
     inventory.add(cg, 0);
@@ -39,13 +38,5 @@ $(function () {
         .click(mouse.click_petridish);
 
     $('#tool-pipette').click(mouse.take_pipette);
-
-    cg.color = 4;
-    for (var i = 0; i < 20; i++) {
-        for (var j = 0; j < 20; j++) {
-            cg.put_cell(i, j);
-        }
-    }
-    cg.set_center(10, 10);
 
 });

@@ -42,12 +42,16 @@ map.put_cell = function (c, v, col) {
         v = new vector(v, col);
     }
     if (0 <= v.row && v.row < map.HEIGHT && 0 <= v.col && v.col < map.WIDTH) {
-        petridish[v.row][v.col] = c;
-        c.row = v.row;
-        c.col = v.col;
-        var target_dom = $('#cell-{}-{}'.format(v.row, v.col));
-        c.bind_dom(target_dom);
-        unfocus_block(target_dom);
+        if (petridish[v.row][v.col] == c) {
+            ;
+        } else {
+            petridish[v.row][v.col] = c;
+            c.row = v.row;
+            c.col = v.col;
+            var target_dom = $('#cell-{}-{}'.format(v.row, v.col));
+            c.bind_dom(target_dom);
+            unfocus_block(target_dom);
+        }
     }
 };
 

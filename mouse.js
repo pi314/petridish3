@@ -153,13 +153,6 @@ mouse.click_block = function (clicked_block) {
         }
         break;
 
-    default:
-        var clicked_cell = map.get_cell_at(coord);
-        if (clicked_cell != EMPTY) {
-            clicked_cell.group.set_center(coord);
-        }
-        break;
-
     }
 };
 
