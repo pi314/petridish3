@@ -43,6 +43,14 @@ function choice (sample_space) {
     return sample_space[Math.floor(Math.random() * sample_space.length)];
 }
 
+function randrange (from, to) {
+    if (to == undefined) {
+        to = from;
+        from = 0;
+    }
+    return int(Math.random() * (to - from) + from);
+}
+
 String.prototype.format = function () {
     var ret = this;
     for (var i = 0; i < arguments.length; i++) {
@@ -79,4 +87,9 @@ COLORS = [
 
 for (var i = 0; i < COLORS.length; i++) {
     COLORS[COLORS[i].hex] = COLORS[i];
+}
+
+function pair (f, s) {
+    this.first = f;
+    this.second = s;
 }

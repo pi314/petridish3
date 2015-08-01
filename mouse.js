@@ -36,7 +36,7 @@ mouse.set_state = function (new_state, data) {
         mouse.selected_cell_gene = data['cell_gene'];
         $('#cursor-cell-icon').removeClass('hidden');
         $('#{}'.format(mouse.selected_cell_gene)).addClass('panel-item-selected');
-        mouse.set_color(mouse.selected_cell_gene.substr(0, 6));
+        mouse.set_color(int(mouse.selected_cell_gene[0], 16));
         mouse.mousemove(data['y'], data['x']);
         break;
 
@@ -95,7 +95,7 @@ mouse.mousemove = function (top, left, force) {
 };
 
 mouse.set_color = function (color) {
-    mouse.color = '#{}'.format(color);
+    mouse.color = '#{}'.format(COLORS[color].hex);
     $('#cursor-cell-icon').css('background', mouse.color);
 };
 
