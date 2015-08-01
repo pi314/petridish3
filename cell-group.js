@@ -2,6 +2,8 @@ PULSE_INTERVAL_UNIT = 50;
 PULSE_DELAY_UNIT = 10;
 GROWTH_UNIT = 500;
 
+MERGE_INDEX = 15;
+
 DIAMAND = 0;
 SQUARE = 1;
 
@@ -193,7 +195,7 @@ cell_group.prototype.pulse_up = function (pulse_data) {
             var friend_group = last_one_friend.group;
             if (friend_group.cell_amount() > t.cell_amount()) {
                 // they are more than my group, merge into them
-                if (randrange(20) == 0) {
+                if (randrange(MERGE_INDEX) == 0) {
                     t.state = STATE_SURRENDER;
                     for (var i in t.member) {
                         friend_group.put_cell(t.member[i].coord());
