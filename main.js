@@ -28,6 +28,8 @@ $(function () {
     inventory.add(cg, 0);
     cg.color = 10;
     inventory.add(cg, 0);
+    cg.color = 11;
+    inventory.add(cg, 0);
 
     $(document).mousemove(function (e) {
         mouse.mousemove(e.clientY, e.clientX);

@@ -150,6 +150,9 @@ cell_group.prototype.pulse_up = function (pulse_data) {
     for (var i in current_receivers) {
         var this_cell = current_receivers[i];
         this_cell.dom.removeClass('block').addClass('pulse-block');
+        if (this.color == 11) {
+            this_cell.dom.css('background', '#{}'.format(COLORS[pulse_data['timestamp'] % 10].hex));
+        }
         this_cell.timestamp = pulse_data['timestamp'];
         this_cell.distance = pulse_data['distance'];
 
@@ -214,7 +217,8 @@ cell_group.prototype.pulse_up = function (pulse_data) {
         var neighbor_coord = choice(available_space)
         // check if we need to create a new mutated cell group
         // but white cell doesn't mutate
-        if (t.color != 10 && randrange(100) == 0) {
+        // rainbow cell doesn't mutate, too
+        if (t.color != 10 && t.color != 11 && randrange(100) == 0) {
             var mutated_cg = t.mutate();
             mutated_cg.put_cell(neighbor_coord);
             mutated_cg.set_center(neighbor_coord);
@@ -332,7 +336,7 @@ cell_group.prototype.mutate = function () {
     var mutated_cg = this.copy();
     var r = randrange(50);
     if (r == 0) {
-        mutated_cg.color = 10;  // ranbow cell, not implemented yet
+        mutated_cg.color = 11;
     } else if (r < 10) {
         mutated_cg.color = 10;
     } else {

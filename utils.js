@@ -83,6 +83,7 @@ COLORS = [
     new rgb(8,  128, 0,   255),
     new rgb(9,  255, 0,   255),
     new rgb(10, 235, 235, 235),
+    new rgb(11, 180, 180, 180),
 ];
 
 for (var i = 0; i < COLORS.length; i++) {
